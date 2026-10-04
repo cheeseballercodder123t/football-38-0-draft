@@ -133,6 +133,14 @@ export function SurvivalGauntlet({
   const [isGauntletWon, setIsGauntletWon] = useState<boolean>(false);
   const [lastMatchResult, setLastMatchResult] = useState<MatchResult | null>(null);
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onExit();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onExit]);
+
   const checkObjectivePassed = (roundIdx: number, result: MatchResult): boolean => {
     const isHome = result.homeTeam === 'Your Starting XI';
     const userScore = isHome ? result.homeScore : result.awayScore;

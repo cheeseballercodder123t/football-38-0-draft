@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   PlayerCareerState,
   CareerPosition,
@@ -16,6 +16,8 @@ import {
   CAREER_NATIONALITIES,
   CAREER_CLUBS_POOL,
   calculateCareerOVR,
+  OUTFIELD_STAT_INFO,
+  GK_STAT_INFO,
 } from '../engine/playerCareerEngine';
 import { soundEngine } from '../utils/soundEngine';
 import {
@@ -48,13 +50,24 @@ interface PlayerCareerModeProps {
 }
 
 export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerModeProps) {
+  // Global Escape key handler to exit mode easily
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onExit();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onExit]);
+
   const [careerState, setCareerState] = useState<PlayerCareerState | null>(() => {
     if (initialBuiltPlayer) {
       return createInitialPlayerCareer(
         initialBuiltPlayer.name,
         'England',
         initialBuiltPlayer.position as CareerPosition,
-        'Poacher',
+        (initialBuiltPlayer.position === 'GK' ? 'SweeperKeeper' : 'Poacher') as CareerArchetype,
         initialBuiltPlayer.attributes
       );
     }
@@ -66,6 +79,16 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
   const [natInput, setNatInput] = useState('England');
   const [posInput, setPosInput] = useState<CareerPosition>('ST');
   const [archInput, setArchInput] = useState<CareerArchetype>('Poacher');
+
+  // Sync archetype choices when switching position to/from GK
+  const handleSelectPosition = (newPos: CareerPosition) => {
+    setPosInput(newPos);
+    if (newPos === 'GK' && !['SweeperKeeper', 'ShotStopper', 'CommandingWall', 'PenaltySpecialist'].includes(archInput)) {
+      setArchInput('SweeperKeeper');
+    } else if (newPos !== 'GK' && ['SweeperKeeper', 'ShotStopper', 'CommandingWall', 'PenaltySpecialist'].includes(archInput)) {
+      setArchInput('Poacher');
+    }
+  };
 
   // Hub tabs
   const [activeTab, setActiveTab] = useState<'fixtures' | 'training' | 'transfers' | 'goat'>('fixtures');
@@ -267,7 +290,7 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
                   <button
                     key={pos}
                     type="button"
-                    onClick={() => setPosInput(pos)}
+                    onClick={() => handleSelectPosition(pos)}
                     className={`py-2 text-xs font-black rounded-lg border transition-all ${
                       posInput === pos
                         ? 'bg-amber-500 text-slate-950 border-amber-300 shadow-md shadow-amber-500/20'
@@ -284,17 +307,24 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
           {/* Right Column: Archetype & Career Blueprint */}
           <div className="space-y-4">
             <label className="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-1">
-              Playing Archetype
+              Playing Archetype {posInput === 'GK' ? '(Goalkeeper Specializations)' : ''}
             </label>
             <div className="grid grid-cols-2 gap-2.5">
-              {[
-                { id: 'Poacher', title: 'Hyper-Poacher', desc: 'Deadly finishing & penalty box predator' },
-                { id: 'Playmaker', title: 'Maestro Vision', desc: 'Incisive passing & game dictation' },
-                { id: 'Speedster', title: 'Electric Winger', desc: 'Blistering acceleration & 1v1 dribbles' },
-                { id: 'BoxToBox', title: 'Iron Engine', desc: 'Relentless stamina & clutch duels' },
-                { id: 'Anchor', title: 'Titan Shield', desc: 'Dominant tackling & aerial presence' },
-                { id: 'SweeperKeeper', title: 'Wall Keeper', desc: 'Acrobatic saves & sweeper reflexes' },
-              ].map(arch => (
+              {(posInput === 'GK'
+                ? [
+                    { id: 'SweeperKeeper', title: 'Sweeper Keeper', desc: 'Rushing off the line, sweeping long balls & precision distribution' },
+                    { id: 'ShotStopper', title: 'Shot-Stopper Titan', desc: 'Incredible feline reflexes & acrobatic point-blank reaction stops' },
+                    { id: 'CommandingWall', title: 'Aerial Colossus', desc: 'Cross dominance, high claims & intimidating penalty box authority' },
+                    { id: 'PenaltySpecialist', title: 'Spot-Kick Specialist', desc: 'Penalty mind games, ice-cold reading & clutch penalty stops' },
+                  ]
+                : [
+                    { id: 'Poacher', title: 'Hyper-Poacher', desc: 'Deadly finishing & penalty box predator' },
+                    { id: 'Playmaker', title: 'Maestro Vision', desc: 'Incisive passing & game dictation' },
+                    { id: 'Speedster', title: 'Electric Winger', desc: 'Blistering acceleration & 1v1 dribbles' },
+                    { id: 'BoxToBox', title: 'Iron Engine', desc: 'Relentless stamina & clutch duels' },
+                    { id: 'Anchor', title: 'Titan Shield', desc: 'Dominant tackling & aerial presence' },
+                  ]
+              ).map(arch => (
                 <button
                   key={arch.id}
                   type="button"
@@ -347,8 +377,8 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
 
   return (
     <div className="w-full max-w-5xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl text-white flex flex-col">
-      {/* Top Banner & Header */}
-      <div className="relative bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/40 p-5 sm:p-6 border-b border-slate-800">
+      {/* Top Banner & Header (Sticky so navigation and exit are never lost) */}
+      <div className="sticky top-0 z-30 bg-slate-950/95 backdrop-blur-xl p-5 sm:p-6 border-b border-slate-800 shadow-xl">
         <div className="flex flex-wrap items-center justify-between gap-4">
           {/* Player Badge & Core Info */}
           <div className="flex items-center gap-4">
@@ -383,7 +413,7 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
             </div>
           </div>
 
-          {/* Quick HUD Metrics */}
+          {/* Quick HUD Metrics & Prominent Exit */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs">
               <Sparkles className="w-4 h-4 text-amber-400" />
@@ -403,9 +433,11 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
 
             <button
               onClick={onExit}
-              className="p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-800/90 hover:bg-rose-500/20 text-slate-300 hover:text-rose-200 border border-slate-700/80 hover:border-rose-500/50 text-xs font-bold transition-all cursor-pointer shadow-lg"
+              title="Exit Player Career Mode (Esc)"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4 text-rose-400" />
+              <span className="hidden sm:inline">Exit Mode</span>
             </button>
           </div>
         </div>
@@ -577,33 +609,87 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
         {/* TAB 2: TRAINING & RPG SKILL TREE */}
         {activeTab === 'training' && (
           <div className="space-y-6">
-            <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
+            <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-wrap items-center justify-between gap-4">
               <div>
-                <h3 className="text-sm font-black text-white">Skill Point Allocation</h3>
-                <p className="text-xs text-slate-400">
-                  Upgrade your 11 attributes. Remaining Skill Points: <span className="text-emerald-400 font-bold">{careerState.skillPoints}</span>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-black text-white">
+                    {careerState.position === 'GK' ? '🧤 Goalkeeper Skill Point Allocation' : '⚡ Skill Point Allocation'}
+                  </h3>
+                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                    {careerState.position === 'GK' ? '11 GK ATTRIBUTES' : '11 ATTRIBUTES'}
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-1">
+                  Available Skill Points: <span className="text-emerald-400 font-black text-sm">{careerState.skillPoints} PTS</span>
+                  <span className="text-slate-500 ml-2">· +1 to any attribute costs 1 SP (Max 99)</span>
                 </p>
+              </div>
+
+              {/* Instant Navigation Buttons */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    soundEngine.playClick();
+                    setActiveTab('fixtures');
+                  }}
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold text-slate-200 hover:text-white transition-all cursor-pointer border border-slate-700"
+                >
+                  <Play className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
+                  ← Back to Fixtures
+                </button>
+                <button
+                  onClick={onExit}
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 border border-rose-500/30 text-xs font-bold transition-all cursor-pointer"
+                  title="Close Career Mode (Esc)"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  Exit Career Mode
+                </button>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {(Object.keys(careerState.attributes) as PlayerAttributeKey[]).map(key => {
-                const val = careerState.attributes[key];
+            {/* Grid of 11 attributes */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5">
+              {(careerState.position === 'GK' ? GK_STAT_INFO : OUTFIELD_STAT_INFO).map(info => {
+                const key = info.key;
+                const val = careerState.attributes[key] ?? 60;
                 return (
-                  <div key={key} className="p-4 rounded-xl bg-slate-900/70 border border-slate-800">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-black text-slate-300">{key}</span>
-                      <span className="text-lg font-black text-amber-400">{val}</span>
-                    </div>
-                    <div className="w-full h-1.5 rounded-full bg-slate-800 mt-2 overflow-hidden">
-                      <div className="h-full bg-amber-400" style={{ width: `${(val / 99) * 100}%` }} />
+                  <div key={key} className="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-black px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 font-mono">
+                            {key}
+                          </span>
+                          <span className="text-xs font-bold text-white">{info.label}</span>
+                        </div>
+                        <span className="text-lg font-black text-amber-400">{val}</span>
+                      </div>
+                      <div className="text-[11px] text-slate-400 leading-tight mb-2">
+                        {info.description}
+                      </div>
+                      <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                        <div
+                          className={`h-full transition-all duration-300 ${
+                            val >= 90
+                              ? 'bg-gradient-to-r from-amber-400 to-amber-300'
+                              : val >= 80
+                              ? 'bg-gradient-to-r from-emerald-500 to-emerald-400'
+                              : val >= 70
+                              ? 'bg-gradient-to-r from-cyan-500 to-cyan-400'
+                              : 'bg-gradient-to-r from-blue-500 to-blue-400'
+                          }`}
+                          style={{ width: `${(val / 99) * 100}%` }}
+                        />
+                      </div>
                     </div>
                     <button
                       onClick={() => handleUpgradeAttribute(key)}
                       disabled={careerState.skillPoints < 1 || val >= 99}
-                      className="w-full mt-3 py-1.5 rounded-lg bg-slate-800 hover:bg-emerald-600 disabled:opacity-30 text-white font-bold text-[11px] transition-all"
+                      className="w-full mt-3 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-slate-800 disabled:to-slate-800 disabled:opacity-40 text-white font-black text-xs transition-all shadow-md shadow-emerald-900/20 cursor-pointer flex items-center justify-center gap-1.5"
                     >
-                      +1 UPGRADE
+                      <Zap className="w-3.5 h-3.5" />
+                      {val >= 99 ? 'MAXED OUT (99)' : '+1 UPGRADE'}
                     </button>
                   </div>
                 );
@@ -612,36 +698,80 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
 
             {/* PlayStyles Catalog */}
             <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800">
-              <h3 className="text-sm font-black text-white mb-3">Signature PlayStyles & Traits</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-                {PLAYSTYLE_CATALOG.map(ps => {
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-black text-white">Signature PlayStyles & Traits</h3>
+                <span className="text-xs text-amber-300 font-bold">
+                  {careerState.trainingXP} XP Available
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {PLAYSTYLE_CATALOG.filter(ps =>
+                  careerState.position === 'GK'
+                    ? ps.category === 'Goalkeeping' || ps.category === 'Mental'
+                    : ps.category !== 'Goalkeeping'
+                ).map(ps => {
                   const isUnlocked = careerState.unlockedPlayStyles.includes(ps.id);
                   return (
                     <div
                       key={ps.id}
-                      className={`p-4 rounded-xl border transition-all ${
+                      className={`p-4 rounded-xl border transition-all flex flex-col justify-between ${
                         isUnlocked
                           ? 'bg-amber-500/10 border-amber-500/50'
                           : 'bg-slate-900/50 border-slate-800'
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-black text-amber-300">{ps.name}</span>
-                        {isUnlocked && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-black text-amber-300">{ps.name}</span>
+                          {isUnlocked && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+                        </div>
+                        <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-semibold inline-block mt-1">
+                          {ps.category}
+                        </span>
+                        <p className="text-[11px] text-slate-400 mt-1 leading-snug">{ps.description}</p>
                       </div>
-                      <p className="text-[11px] text-slate-400 mt-1 leading-snug">{ps.description}</p>
-                      {!isUnlocked && (
+                      {!isUnlocked ? (
                         <button
                           onClick={() => handleUnlockPlaystyle(ps.id, ps.costXP)}
                           disabled={careerState.trainingXP < ps.costXP}
-                          className="w-full mt-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-30 text-slate-950 font-black text-[11px] transition-all"
+                          className="w-full mt-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 disabled:opacity-30 text-slate-950 font-black text-[11px] transition-all cursor-pointer"
                         >
                           UNLOCK ({ps.costXP} XP)
                         </button>
+                      ) : (
+                        <div className="w-full mt-3 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 text-center text-[10px] font-bold border border-emerald-500/30">
+                          ACTIVE TRAIT
+                        </div>
                       )}
                     </div>
                   );
                 })}
+              </div>
+            </div>
+
+            {/* Bottom Floating Navigation / Exit Bar */}
+            <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-amber-950/40 border border-slate-800 flex flex-wrap items-center justify-between gap-3 shadow-xl">
+              <div className="text-xs text-slate-300 font-semibold">
+                Done upgrading your {careerState.position === 'GK' ? 'Goalkeeper' : 'Player'}?
+              </div>
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={() => {
+                    soundEngine.playClick();
+                    setActiveTab('fixtures');
+                  }}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-xs transition-all shadow-md shadow-amber-500/20 flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  PLAY NEXT FIXTURE
+                </button>
+                <button
+                  onClick={onExit}
+                  className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition-all flex items-center gap-1.5 border border-slate-700 cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  EXIT CAREER MODE
+                </button>
               </div>
             </div>
           </div>

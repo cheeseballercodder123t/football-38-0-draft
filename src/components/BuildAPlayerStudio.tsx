@@ -14,12 +14,12 @@ import {
   UserCheck,
   Star,
 } from 'lucide-react';
-import { Player, PlayerPosition, PlayerAttributeKey, BuildAPlayerAttributeSlot, BuiltPlayerResult } from '../types/football';
+import { Player, PlayerPosition, OutfieldAttributeKey, BuildAPlayerAttributeSlot, BuiltPlayerResult } from '../types/football';
 import { SQUADS } from '../data/squads';
 import { soundEngine } from '../utils/soundEngine';
 
 export const STAT_DEFINITIONS: {
-  key: PlayerAttributeKey;
+  key: OutfieldAttributeKey;
   label: string;
   category: string;
   description: string;
@@ -37,7 +37,7 @@ export const STAT_DEFINITIONS: {
   { key: 'STA', label: 'Stamina', category: 'Physical', description: '90-minute engine & relentless work rate' },
 ];
 
-function derivePlayer11Stats(player: Player): Record<PlayerAttributeKey, number> {
+function derivePlayer11Stats(player: Player): Record<OutfieldAttributeKey, number> {
   const hash = Math.abs(
     player.name.split('').reduce((acc, char) => (acc * 31 + char.charCodeAt(0)) | 0, 0)
   );
@@ -102,7 +102,7 @@ function calculateTier(overall: number): BuiltPlayerResult['tier'] {
   return 'Journeyman';
 }
 
-function generateCareerStats(overall: number, stats: Record<PlayerAttributeKey, number>) {
+function generateCareerStats(overall: number, stats: Record<OutfieldAttributeKey, number>) {
   const bd = overall >= 96 ? 5 : overall >= 93 ? 3 : overall >= 90 ? 1 : 0;
   const goals = Math.max(
     40,
@@ -128,7 +128,7 @@ function generateCareerStats(overall: number, stats: Record<PlayerAttributeKey, 
 
 function buildScoutBio(
   tier: BuiltPlayerResult['tier'],
-  stats: Record<PlayerAttributeKey, number>,
+  stats: Record<OutfieldAttributeKey, number>,
   pos: PlayerPosition
 ): string {
   const topStats = Object.entries(stats)
@@ -161,8 +161,8 @@ interface BuildAPlayerStudioProps {
 export function BuildAPlayerStudio({ onImportPlayerToSquad, onExportToPlayerCareer, onExit }: BuildAPlayerStudioProps) {
   const [round, setRound] = useState<number>(1);
   const [candidatePlayer, setCandidatePlayer] = useState<Player | null>(null);
-  const [candidateDerivedStats, setCandidateDerivedStats] = useState<Record<PlayerAttributeKey, number> | null>(null);
-  const [assignedSlots, setAssignedSlots] = useState<Record<PlayerAttributeKey, {
+  const [candidateDerivedStats, setCandidateDerivedStats] = useState<Record<OutfieldAttributeKey, number> | null>(null);
+  const [assignedSlots, setAssignedSlots] = useState<Record<OutfieldAttributeKey, {
     value: number;
     donorName: string;
     donorClub: string;
@@ -205,6 +205,17 @@ export function BuildAPlayerStudio({ onImportPlayerToSquad, onExportToPlayerCare
     }, 600);
   };
 
+  // Escape key handler to exit cleanly
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onExit();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onExit]);
+
   // Start with a spin if candidate is null
   React.useEffect(() => {
     if (!candidatePlayer && !finalResult) {
@@ -212,7 +223,7 @@ export function BuildAPlayerStudio({ onImportPlayerToSquad, onExportToPlayerCare
     }
   }, []);
 
-  const handleAssignAttribute = (key: PlayerAttributeKey) => {
+  const handleAssignAttribute = (key: OutfieldAttributeKey) => {
     if (!candidatePlayer || !candidateDerivedStats || assignedSlots[key] !== null) return;
 
     soundEngine.playStatAssign();
@@ -235,9 +246,9 @@ export function BuildAPlayerStudio({ onImportPlayerToSquad, onExportToPlayerCare
       const values = Object.values(newAssigned).map(item => item!.value);
       const overall = Math.round(values.reduce((a, b) => a + b, 0) / 11);
       const tier = calculateTier(overall);
-      const cleanStats: Record<PlayerAttributeKey, number> = {} as any;
+      const cleanStats: Record<OutfieldAttributeKey, number> = {} as any;
       Object.entries(newAssigned).forEach(([k, item]) => {
-        cleanStats[k as PlayerAttributeKey] = item!.value;
+        cleanStats[k as OutfieldAttributeKey] = item!.value;
       });
 
       const career = generateCareerStats(overall, cleanStats);

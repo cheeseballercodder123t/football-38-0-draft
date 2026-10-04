@@ -53,9 +53,26 @@ export function ManagerProfileCardModal({
     setTimeout(() => setCopied(false), 2500);
   };
 
+  // Escape key handler
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-300">
-      <div className="relative w-full max-w-md rounded-3xl bg-slate-950 border border-amber-500/40 p-6 shadow-2xl text-white overflow-hidden text-center">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-300 cursor-pointer"
+      onClick={e => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="relative w-full max-w-md rounded-3xl bg-slate-950 border border-amber-500/40 p-6 shadow-2xl text-white overflow-hidden text-center cursor-default"
+        onClick={e => e.stopPropagation()}
+      >
         {/* Holographic background sheen */}
         <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/10 via-emerald-500/10 to-purple-500/10 pointer-events-none" />
 

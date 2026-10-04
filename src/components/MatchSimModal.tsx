@@ -138,6 +138,17 @@ export const MatchSimModal: React.FC<MatchSimModalProps> = ({
     soundEngine.playWhistle();
   }, [match.id, match.events]);
 
+  // Escape key listener to exit modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   // Main simulation tick loop
   useEffect(() => {
     if (!isPlaying || currentMinute >= maxMinute || activeDecision !== null || showHalftimeTalk) return;
@@ -1032,8 +1043,16 @@ export const MatchSimModal: React.FC<MatchSimModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/90 backdrop-blur-md overflow-y-auto font-sans select-none animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl my-auto bg-gradient-to-b from-[#141d2c] via-[#0d1422] to-[#070b14] border-2 border-slate-700/80 rounded-3xl flex flex-col max-h-[95vh] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.95)] animate-in zoom-in-95 duration-200">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/90 backdrop-blur-md overflow-y-auto font-sans select-none animate-in fade-in duration-200 cursor-pointer"
+      onClick={e => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="relative w-full max-w-xl my-auto bg-gradient-to-b from-[#141d2c] via-[#0d1422] to-[#070b14] border-2 border-slate-700/80 rounded-3xl flex flex-col max-h-[95vh] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.95)] animate-in zoom-in-95 duration-200 cursor-default"
+        onClick={e => e.stopPropagation()}
+      >
 
         {/* Top TV Broadcast Header Bar */}
         <div className="p-3.5 sm:p-4 border-b border-slate-800 bg-[#090e17]/95 flex items-center justify-between font-mono text-xs relative z-10">

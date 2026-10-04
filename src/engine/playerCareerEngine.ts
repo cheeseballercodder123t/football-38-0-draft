@@ -1,5 +1,7 @@
 import {
   PlayerAttributeKey,
+  OutfieldAttributeKey,
+  GKAttributeKey,
   CareerClub,
   CareerPosition,
   CareerArchetype,
@@ -12,13 +14,50 @@ import {
 export interface PlayStyleDefinition {
   id: string;
   name: string;
-  category: 'Shooting' | 'Passing' | 'Defending' | 'Physical' | 'Mental';
+  category: 'Shooting' | 'Passing' | 'Defending' | 'Physical' | 'Mental' | 'Goalkeeping';
   icon: string;
   description: string;
   costXP: number;
 }
 
+export interface AttributeInfo {
+  key: PlayerAttributeKey;
+  label: string;
+  category: string;
+  description: string;
+  shortDesc: string;
+}
+
+export const OUTFIELD_STAT_INFO: AttributeInfo[] = [
+  { key: 'PAC', label: 'Pace', category: 'Speed', description: 'Sprint speed & explosive acceleration burst', shortDesc: 'Speed & Burst' },
+  { key: 'SHO', label: 'Shooting', category: 'Attacking', description: 'Finishing, shot power & long-range strikes', shortDesc: 'Finishing & Power' },
+  { key: 'PAS', label: 'Passing', category: 'Playmaking', description: 'Vision, incisive crossing & through-balls', shortDesc: 'Vision & Delivery' },
+  { key: 'SKL', label: 'Skill Moves', category: 'Technique', description: 'Flair, dribbling moves & agility', shortDesc: 'Dribbling & Agility' },
+  { key: 'DEF', label: 'Defending', category: 'Defending', description: 'Interceptions, marking & tackling precision', shortDesc: 'Tackling & Marking' },
+  { key: 'PHY', label: 'Physicality', category: 'Strength', description: 'Jumping, body strength & aggressive duels', shortDesc: 'Strength & Duels' },
+  { key: 'HEA', label: 'Heading', category: 'Aerial', description: 'Aerial dominance & heading precision', shortDesc: 'Aerial Dominance' },
+  { key: 'IQ', label: 'Football IQ', category: 'Mental', description: 'Game reading, anticipation & composure', shortDesc: 'Game Reading' },
+  { key: 'WF', label: 'Weak Foot', category: 'Technique', description: 'Finishing & delivery on opposite foot', shortDesc: 'Opposite Foot' },
+  { key: 'CTL', label: 'Close Control', category: 'Technique', description: 'First touch & tight-space manipulation', shortDesc: 'First Touch' },
+  { key: 'STA', label: 'Stamina', category: 'Physical', description: '90-minute engine & relentless work rate', shortDesc: 'Work Rate' },
+];
+
+export const GK_STAT_INFO: AttributeInfo[] = [
+  { key: 'DIV', label: 'Diving', category: 'Goalkeeping', description: 'Acrobatic flight, horizontal reach & top-corner fingertip saves', shortDesc: 'Flight & Top Corner' },
+  { key: 'HAN', label: 'Handling', category: 'Goalkeeping', description: 'Clean catching reliability, sticky grip & zero rebound spills', shortDesc: 'Clean Catching' },
+  { key: 'KIC', label: 'Kicking', category: 'Goalkeeping', description: '70-yard goal kicks, precision half-volleys & counter launches', shortDesc: 'Punts & Half-Volleys' },
+  { key: 'REF', label: 'Reflexes', category: 'Goalkeeping', description: 'Split-second reaction stops, leg saves & miraculous recoveries', shortDesc: 'Point-Blank Stops' },
+  { key: 'SPD', label: 'Sweeper Speed', category: 'Sweeper', description: 'Acceleration off line, slide tackling outside box & closing angles', shortDesc: 'Rushing & Sweeping' },
+  { key: 'POS', label: 'Positioning', category: 'Goalkeeping', description: 'Angle geometry, near-post denial & post-to-post footwork', shortDesc: 'Angle Geometry' },
+  { key: 'AER', label: 'Aerial Reach', category: 'Aerial', description: 'Towering leaps over strikers, claiming high crosses & punching clear', shortDesc: 'Cross Domination' },
+  { key: '1V1', label: '1-on-1 Duelist', category: 'Goalkeeping', description: 'Making the frame huge, spread saves & waiting out attackers', shortDesc: 'Spread Saves' },
+  { key: 'IQ', label: 'GK Anticipation', category: 'Mental', description: 'Reading striker run-up, penalty spot instincts & backline commands', shortDesc: 'Penalty Reading' },
+  { key: 'THR', label: 'Bullet Throw', category: 'Distribution', description: 'Overhand missile throws directly to wingers to trigger fast breaks', shortDesc: 'Rapid Wing Throws' },
+  { key: 'STA', label: 'Mental Focus', category: 'Mental', description: 'Laser focus under intense siege & composure in 90+ stoppage time', shortDesc: 'Clutch Focus' },
+];
+
 export const PLAYSTYLE_CATALOG: PlayStyleDefinition[] = [
+  // Outfield PlayStyles
   {
     id: 'finesse_shot',
     name: 'Finesse Shot+',
@@ -82,6 +121,63 @@ export const PLAYSTYLE_CATALOG: PlayStyleDefinition[] = [
     icon: 'FastForward',
     description: 'Explosive acceleration burst when knocking the ball past the last defender.',
     costXP: 260,
+  },
+  // Goalkeeper Signature PlayStyles
+  {
+    id: 'cat_reflexes',
+    name: 'Cat-Like Reflexes+',
+    category: 'Goalkeeping',
+    icon: 'Zap',
+    description: '+25% miraculous reaction saves from inside the 6-yard box.',
+    costXP: 250,
+  },
+  {
+    id: 'elastic_reach',
+    name: 'Elastic Reach+',
+    category: 'Goalkeeping',
+    icon: 'Sparkles',
+    description: 'Fingertip deflections push top-corner rockets onto the woodwork or over the bar.',
+    costXP: 260,
+  },
+  {
+    id: 'sweeper_keeper_trait',
+    name: 'Sweeper Keeper+',
+    category: 'Goalkeeping',
+    icon: 'Shield',
+    description: 'Rushes off the line at lightning speed to smother 1-on-1 breakaways outside the box.',
+    costXP: 270,
+  },
+  {
+    id: 'aerial_titan',
+    name: 'Aerial Titan+',
+    category: 'Goalkeeping',
+    icon: 'Crown',
+    description: 'Automatically commands the penalty area and plucks all contested crosses out of the sky.',
+    costXP: 280,
+  },
+  {
+    id: 'iron_hands',
+    name: 'Iron Hands+',
+    category: 'Goalkeeping',
+    icon: 'Shield',
+    description: 'Catches fierce and deflected shots cleanly with zero spilled rebounds.',
+    costXP: 250,
+  },
+  {
+    id: 'laser_distributor',
+    name: 'Laser Distributor+',
+    category: 'Goalkeeping',
+    icon: 'Target',
+    description: 'Pinpoint 60-yard dropkicks and flat overhand bullet throws to trigger instant breakaways.',
+    costXP: 240,
+  },
+  {
+    id: 'penalty_mind_games',
+    name: 'Penalty Wall+',
+    category: 'Goalkeeping',
+    icon: 'Flame',
+    description: 'Intimidates penalty takers and boosts spot-kick stop probability by +30%.',
+    costXP: 290,
   },
 ];
 
@@ -157,7 +253,7 @@ export const CAREER_CLUBS_POOL: CareerClub[] = [
   { name: 'Lille', league: 'Ligue 1', strength: 79, badgeColor: '#E01E2B', reputation: 78 },
 ];
 
-export const POSITION_WEIGHTS: Record<CareerPosition, Record<PlayerAttributeKey, number>> = {
+export const OUTFIELD_POSITION_WEIGHTS: Record<Exclude<CareerPosition, 'GK'>, Record<OutfieldAttributeKey, number>> = {
   ST: { SHO: 3.2, PAC: 2.2, SKL: 1.8, CTL: 1.8, WF: 1.5, IQ: 1.4, HEA: 1.2, PHY: 1.1, STA: 0.9, PAS: 0.8, DEF: 0.2 },
   LW: { PAC: 3.0, SKL: 2.4, CTL: 2.2, SHO: 2.0, PAS: 1.6, WF: 1.4, IQ: 1.3, STA: 1.0, PHY: 0.8, HEA: 0.5, DEF: 0.3 },
   RW: { PAC: 3.0, SKL: 2.4, CTL: 2.2, SHO: 2.0, PAS: 1.6, WF: 1.4, IQ: 1.3, STA: 1.0, PHY: 0.8, HEA: 0.5, DEF: 0.3 },
@@ -167,17 +263,42 @@ export const POSITION_WEIGHTS: Record<CareerPosition, Record<PlayerAttributeKey,
   CB: { DEF: 4.0, PHY: 3.0, HEA: 2.5, IQ: 2.0, STA: 1.4, PAC: 1.4, CTL: 0.7, PAS: 0.6, WF: 0.3, SHO: 0.2, SKL: 0.2 },
   LB: { PAC: 2.6, DEF: 2.4, STA: 2.2, PHY: 1.8, PAS: 1.6, CTL: 1.4, IQ: 1.3, HEA: 0.8, SKL: 0.7, WF: 0.6, SHO: 0.4 },
   RB: { PAC: 2.6, DEF: 2.4, STA: 2.2, PHY: 1.8, PAS: 1.6, CTL: 1.4, IQ: 1.3, HEA: 0.8, SKL: 0.7, WF: 0.6, SHO: 0.4 },
-  GK: { DEF: 4.5, IQ: 3.0, PHY: 2.5, HEA: 1.8, CTL: 1.2, STA: 1.0, PAS: 1.0, PAC: 0.8, WF: 0.4, SHO: 0.2, SKL: 0.2 },
 };
 
+export const GK_POSITION_WEIGHTS: Record<GKAttributeKey, number> = {
+  REF: 3.5,
+  DIV: 3.2,
+  POS: 3.0,
+  '1V1': 2.6,
+  HAN: 2.5,
+  AER: 2.2,
+  SPD: 1.8,
+  IQ: 1.8,
+  KIC: 1.5,
+  THR: 1.2,
+  STA: 1.0,
+};
+
+export const POSITION_WEIGHTS = OUTFIELD_POSITION_WEIGHTS;
+
 export function calculateCareerOVR(
-  attrs: Record<PlayerAttributeKey, number>,
+  attrs: Record<string, number>,
   pos: CareerPosition
 ): number {
-  const weights = POSITION_WEIGHTS[pos] || POSITION_WEIGHTS.ST;
+  if (pos === 'GK') {
+    let sum = 0;
+    let tot = 0;
+    for (const k of Object.keys(GK_POSITION_WEIGHTS) as GKAttributeKey[]) {
+      const w = GK_POSITION_WEIGHTS[k] || 1;
+      sum += (attrs[k] || 65) * w;
+      tot += w;
+    }
+    return Math.round(sum / tot);
+  }
+  const weights = OUTFIELD_POSITION_WEIGHTS[pos as Exclude<CareerPosition, 'GK'>] || OUTFIELD_POSITION_WEIGHTS.ST;
   let sum = 0;
   let tot = 0;
-  for (const k of Object.keys(weights) as PlayerAttributeKey[]) {
+  for (const k of Object.keys(weights) as OutfieldAttributeKey[]) {
     const w = weights[k] || 1;
     sum += (attrs[k] || 60) * w;
     tot += w;
@@ -190,9 +311,9 @@ export function createInitialPlayerCareer(
   nationality: string,
   position: CareerPosition,
   archetype: CareerArchetype,
-  importedAttrs?: Record<PlayerAttributeKey, number>
+  importedAttrs?: Record<string, number>
 ): PlayerCareerState {
-  const baseAttrs: Record<PlayerAttributeKey, number> = importedAttrs
+  const baseAttrs: Record<string, number> = importedAttrs
     ? { ...importedAttrs }
     : generateStartingAttributes(position, archetype);
 
@@ -262,15 +383,58 @@ function getDefaultPlayStyleForArchetype(archetype: CareerArchetype): string {
     case 'Speedster': return 'speed_dribbler';
     case 'BoxToBox': return 'relentless_motor';
     case 'Anchor': return 'intercept_plus';
-    case 'SweeperKeeper': return 'ice_in_veins';
+    case 'SweeperKeeper': return 'sweeper_keeper_trait';
+    case 'ShotStopper': return 'cat_reflexes';
+    case 'CommandingWall': return 'aerial_titan';
+    case 'PenaltySpecialist': return 'penalty_mind_games';
+    default: return 'ice_in_veins';
   }
 }
 
 function generateStartingAttributes(
   position: CareerPosition,
   archetype: CareerArchetype
-): Record<PlayerAttributeKey, number> {
-  const attrs: Record<PlayerAttributeKey, number> = {
+): Record<string, number> {
+  if (position === 'GK') {
+    const gkAttrs: Record<GKAttributeKey, number> = {
+      DIV: 71,
+      HAN: 69,
+      KIC: 65,
+      REF: 74,
+      SPD: 60,
+      POS: 70,
+      AER: 70,
+      '1V1': 71,
+      IQ: 68,
+      THR: 66,
+      STA: 72,
+    };
+
+    if (archetype === 'SweeperKeeper') {
+      gkAttrs.SPD += 8;
+      gkAttrs.KIC += 6;
+      gkAttrs.THR += 5;
+    } else if (archetype === 'ShotStopper') {
+      gkAttrs.REF += 8;
+      gkAttrs.DIV += 6;
+      gkAttrs['1V1'] += 4;
+    } else if (archetype === 'CommandingWall') {
+      gkAttrs.AER += 8;
+      gkAttrs.HAN += 6;
+      gkAttrs.POS += 5;
+    } else if (archetype === 'PenaltySpecialist') {
+      gkAttrs.IQ += 8;
+      gkAttrs.REF += 5;
+      gkAttrs.DIV += 4;
+    }
+
+    for (const k of Object.keys(gkAttrs) as GKAttributeKey[]) {
+      gkAttrs[k] = Math.max(50, Math.min(84, Math.round(gkAttrs[k] + (Math.random() * 6 - 3))));
+    }
+    return gkAttrs;
+  }
+
+  const attrs: Record<OutfieldAttributeKey, number> = {
     HEA: 60,
     IQ: 65,
     SHO: 62,
@@ -300,11 +464,6 @@ function generateStartingAttributes(
     attrs.PHY += 12;
     attrs.HEA += 10;
     attrs.SHO -= 16;
-  } else if (position === 'GK') {
-    attrs.DEF += 22;
-    attrs.PHY += 8;
-    attrs.SHO = 40;
-    attrs.SKL = 45;
   }
 
   // Adjust by Archetype
@@ -326,7 +485,7 @@ function generateStartingAttributes(
   }
 
   // Clamp within 45 to 84 for wonderkid starting baseline
-  for (const k of Object.keys(attrs) as PlayerAttributeKey[]) {
+  for (const k of Object.keys(attrs) as OutfieldAttributeKey[]) {
     attrs[k] = Math.max(45, Math.min(84, Math.round(attrs[k] + (Math.random() * 6 - 3))));
   }
 
@@ -369,29 +528,45 @@ export function simulateCareerMatchday(state: PlayerCareerState): {
   }
 
   // Individual player contribution
+  const isGK = state.position === 'GK';
   const isAttacker = ['ST', 'LW', 'RW', 'CAM'].includes(state.position);
   const isMid = ['CM', 'CDM'].includes(state.position);
-  const isDef = ['CB', 'LB', 'RB', 'GK'].includes(state.position);
+  const isDef = ['CB', 'LB', 'RB'].includes(state.position);
 
   let playerGoals = 0;
   let playerAssists = 0;
   let playerCleanSheet = 0;
+  let playerSaves = 0;
 
-  if (clubGoals > 0) {
+  if (isGK) {
+    if (oppGoals === 0) {
+      playerCleanSheet = 1;
+    }
+    const shotsFaced = 3 + Math.floor(Math.random() * 6);
+    const gkOvr = state.overall;
+    const saveProb = Math.min(0.94, Math.max(0.60, 0.70 + (gkOvr - 72) * 0.015));
+    playerSaves = Math.max(2, Math.round(shotsFaced * saveProb));
+
+    // Rare long-ball counter assist for sweeper/kicking keepers
+    const kickRating = state.attributes.KIC || state.attributes.THR || 65;
+    if (Math.random() < 0.06 && kickRating >= 76) {
+      playerAssists = 1;
+    }
+  } else if (clubGoals > 0) {
     if (isAttacker) {
-      if (Math.random() < 0.38 + (state.attributes.SHO - 70) * 0.015) {
+      if (Math.random() < 0.38 + ((state.attributes.SHO || 70) - 70) * 0.015) {
         playerGoals = 1;
         if (clubGoals >= 2 && Math.random() < 0.22) playerGoals = 2;
         if (clubGoals >= 3 && Math.random() < 0.06) playerGoals = 3;
       }
-      if (Math.random() < 0.25 + (state.attributes.PAS - 70) * 0.01) {
+      if (Math.random() < 0.25 + ((state.attributes.PAS || 70) - 70) * 0.01) {
         playerAssists = 1;
       }
     } else if (isMid) {
-      if (Math.random() < 0.18 + (state.attributes.SHO - 70) * 0.01) playerGoals = 1;
-      if (Math.random() < 0.32 + (state.attributes.PAS - 70) * 0.015) playerAssists = 1;
+      if (Math.random() < 0.18 + ((state.attributes.SHO || 70) - 70) * 0.01) playerGoals = 1;
+      if (Math.random() < 0.32 + ((state.attributes.PAS || 70) - 70) * 0.015) playerAssists = 1;
     } else {
-      if (Math.random() < 0.06 + (state.attributes.HEA - 70) * 0.005) playerGoals = 1;
+      if (Math.random() < 0.06 + ((state.attributes.HEA || 70) - 70) * 0.005) playerGoals = 1;
       if (Math.random() < 0.08) playerAssists = 1;
     }
   }
@@ -402,14 +577,28 @@ export function simulateCareerMatchday(state: PlayerCareerState): {
 
   // Compute Match Rating
   let baseRating = 6.2 + (state.overall - 70) * 0.04;
-  baseRating += playerGoals * 1.3;
-  baseRating += playerAssists * 0.8;
-  baseRating += playerCleanSheet * 0.7;
-  if (clubGoals > oppGoals) baseRating += 0.4;
-  if (clubGoals < oppGoals) baseRating -= 0.3;
+  if (isGK) {
+    baseRating = 6.4 + (state.overall - 70) * 0.035;
+    baseRating += playerCleanSheet * 1.3;
+    baseRating += Math.min(1.8, (playerSaves - 2) * 0.22);
+    if (oppGoals >= 3) baseRating -= 0.6;
+    else if (oppGoals === 0) baseRating += 0.4;
+  } else {
+    baseRating += playerGoals * 1.3;
+    baseRating += playerAssists * 0.8;
+    baseRating += playerCleanSheet * 0.7;
+    if (clubGoals > oppGoals) baseRating += 0.4;
+    if (clubGoals < oppGoals) baseRating -= 0.3;
+  }
   const matchRating = Math.max(5.5, Math.min(10.0, Math.round((baseRating + (Math.random() * 0.8 - 0.4)) * 10) / 10));
 
-  const earnedXP = Math.round(matchRating * 16 + (playerGoals * 25) + (playerAssists * 15));
+  const earnedXP = Math.round(
+    matchRating * 16 +
+    (playerGoals * 25) +
+    (playerAssists * 15) +
+    (playerCleanSheet * 20) +
+    (playerSaves * 3)
+  );
 
   // Determine if a clutch moment triggers
   let triggeredMoment: CareerMatchMoment | null = null;
@@ -423,6 +612,7 @@ export function simulateCareerMatchday(state: PlayerCareerState): {
     playerGoals > 0 ? `${playerGoals}G` : '',
     playerAssists > 0 ? `${playerAssists}A` : '',
     playerCleanSheet > 0 ? 'CS' : '',
+    playerSaves > 0 ? `${playerSaves} SV` : '',
   ].filter(Boolean).join(', ');
 
   const logEntry = `MD${matchday}: ${club.name} ${clubGoals}-${oppGoals} ${opp.name} (${resultTag}) · Rating: ${matchRating.toFixed(1)}${statsTag ? ` [${statsTag}]` : ''}`;
@@ -459,6 +649,38 @@ function generateClutchMoment(
 ): CareerMatchMoment {
   const minute = 80 + Math.floor(Math.random() * 11);
   const isAttacking = ['ST', 'LW', 'RW', 'CAM', 'CM'].includes(state.position);
+
+  if (state.position === 'GK') {
+    return {
+      id: `moment-${Date.now()}`,
+      minute,
+      matchContext: `${minute}' vs ${oppName} (${clubGoals}-${oppGoals})`,
+      situation: `🚨 CRUNCH TIME! Opposition launches an all-out assault on your goal in the dying minutes!`,
+      options: [
+        {
+          label: 'Acrobatic Fingertip Save',
+          actionDesc: 'Leap across the goal frame to push a 25-yard dipping screamer onto the crossbar',
+          requiredAttr: 'DIV',
+          difficultyVal: 71,
+          reward: { goals: 0, assists: 0, ratingDelta: 1.0 },
+        },
+        {
+          label: 'Point-Blank Cat Reflex Block',
+          actionDesc: 'Throw your legs and gloves out to deny an unmarkable volley from 5 yards out',
+          requiredAttr: 'REF',
+          difficultyVal: 73,
+          reward: { goals: 0, assists: 0, ratingDelta: 1.1 },
+        },
+        {
+          label: 'Smother 1v1 Breakaway at Striker’s Feet',
+          actionDesc: 'Sprint off your line and make your frame immense to swallow the striker’s chip',
+          requiredAttr: '1V1',
+          difficultyVal: 70,
+          reward: { goals: 0, assists: 0, ratingDelta: 0.9 },
+        },
+      ],
+    };
+  }
 
   if (isAttacking) {
     return {
@@ -640,10 +862,13 @@ export function advanceCareerSeason(state: PlayerCareerState): {
   const wonGoldenBoot = isTopScorer;
   if (wonGoldenBoot) trophiesWon.push('European Golden Boot');
 
+  const wonGoldenGlove = state.position === 'GK' && state.seasonCleanSheets >= 15;
+  if (wonGoldenGlove) trophiesWon.push('Golden Glove Trophy');
+
   // Ballon d'Or calculation
+  const isGK = state.position === 'GK';
   const ballonDorPoints =
-    state.seasonGoals * 1.5 +
-    state.seasonAssists * 1.2 +
+    (isGK ? state.seasonCleanSheets * 2.8 : state.seasonGoals * 1.5 + state.seasonAssists * 1.2) +
     (wonLeague ? 25 : 0) +
     (wonUCL ? 40 : 0) +
     (wonWorldCup ? 50 : 0) +
@@ -664,7 +889,11 @@ export function advanceCareerSeason(state: PlayerCareerState): {
     cleanSheets: state.seasonCleanSheets,
     avgRating: Math.round(avgRating * 10) / 10,
     trophies: trophiesWon,
-    awards: [wonBallonDor ? "Ballon d'Or" : '', wonGoldenBoot ? 'Golden Boot' : ''].filter(Boolean),
+    awards: [
+      wonBallonDor ? "Ballon d'Or" : '',
+      wonGoldenBoot ? 'Golden Boot' : '',
+      wonGoldenGlove ? 'Golden Glove' : '',
+    ].filter(Boolean),
   };
 
   // Progression & Age decay
@@ -673,15 +902,28 @@ export function advanceCareerSeason(state: PlayerCareerState): {
 
   if (newAge <= 27) {
     // Prime growth
-    const growthKeys: PlayerAttributeKey[] = ['SHO', 'PAS', 'IQ', 'CTL', 'PAC', 'STA'];
+    const growthKeys: PlayerAttributeKey[] =
+      state.position === 'GK'
+        ? ['REF', 'DIV', 'POS', '1V1', 'HAN', 'IQ', 'STA']
+        : ['SHO', 'PAS', 'IQ', 'CTL', 'PAC', 'STA'];
+
     growthKeys.forEach(k => {
-      updatedAttrs[k] = Math.min(99, updatedAttrs[k] + 1 + Math.floor(Math.random() * 2));
+      if (updatedAttrs[k] !== undefined) {
+        updatedAttrs[k] = Math.min(99, updatedAttrs[k] + 1 + Math.floor(Math.random() * 2));
+      }
     });
   } else if (newAge >= 33) {
     // Veteran decay
-    updatedAttrs.PAC = Math.max(50, updatedAttrs.PAC - 2);
-    updatedAttrs.STA = Math.max(50, updatedAttrs.STA - 2);
-    updatedAttrs.IQ = Math.min(99, updatedAttrs.IQ + 1); // Football IQ stays high
+    if (state.position === 'GK') {
+      if (updatedAttrs.SPD) updatedAttrs.SPD = Math.max(50, updatedAttrs.SPD - 2);
+      if (updatedAttrs.REF) updatedAttrs.REF = Math.max(50, updatedAttrs.REF - 1);
+      if (updatedAttrs.POS) updatedAttrs.POS = Math.min(99, updatedAttrs.POS + 1);
+      if (updatedAttrs.IQ) updatedAttrs.IQ = Math.min(99, updatedAttrs.IQ + 1);
+    } else {
+      if (updatedAttrs.PAC) updatedAttrs.PAC = Math.max(50, updatedAttrs.PAC - 2);
+      if (updatedAttrs.STA) updatedAttrs.STA = Math.max(50, updatedAttrs.STA - 2);
+      if (updatedAttrs.IQ) updatedAttrs.IQ = Math.min(99, updatedAttrs.IQ + 1);
+    }
   }
 
   const newOverall = calculateCareerOVR(updatedAttrs, state.position);
@@ -754,6 +996,7 @@ export function calculateGOATScore(state: PlayerCareerState): {
     t.domesticCups * 5 +
     state.careerGoals * 0.15 +
     state.careerAssists * 0.1 +
+    state.careerCleanSheets * 0.45 +
     state.careerApps * 0.05
   );
 
@@ -767,6 +1010,7 @@ export function calculateGOATScore(state: PlayerCareerState): {
   const comparisonTable = [
     { name: 'Lionel Messi', score: 510, trophies: '8 Ballon d\'Or, 1 World Cup, 4 UCL', era: 'Modern Era' },
     { name: 'Cristiano Ronaldo', score: 460, trophies: '5 Ballon d\'Or, 5 UCL, 1 Euro', era: 'Modern Era' },
+    { name: 'Lev Yashin & Buffon', score: 430, trophies: '1 World Cup, 1 Ballon d\'Or, 10 League Titles', era: 'Goalkeeping GOATs' },
     { name: 'Pelé', score: 420, trophies: '3 World Cups, 1,000+ Goals', era: 'Classic Era' },
     { name: 'Diego Maradona', score: 370, trophies: '1 World Cup, Eternal Icon', era: '80s-90s Era' },
     { name: 'Zinedine Zidane', score: 320, trophies: '1 Ballon d\'Or, 1 World Cup, 1 UCL', era: 'Galáctico Era' },

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useDraftSim, getPlayerSalaryValue } from './hooks/useDraftSim';
 import { Navbar } from './components/Navbar';
 import { SlotWheel } from './components/SlotWheel';
@@ -215,6 +215,58 @@ export function App() {
     }
     return filtered;
   }, [currentSquadPool.players, positionFilter, difficulty]);
+
+  // Global Escape key handler to close open modals smoothly
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (showPlayerCareer) {
+          setShowPlayerCareer(false);
+          setPlayerCareerImportCandidate(null);
+        } else if (showBuildAPlayerStudio) {
+          setShowBuildAPlayerStudio(false);
+        } else if (showSurvivalGauntlet) {
+          setShowSurvivalGauntlet(false);
+        } else if (showMysteryWordle) {
+          setShowMysteryWordle(false);
+        } else if (showTeammateChainModal) {
+          setShowTeammateChainModal(false);
+        } else if (showOnTheMoneyTombola) {
+          setShowOnTheMoneyTombola(false);
+        } else if (showManagerDNA) {
+          setShowManagerDNA(false);
+        } else if (showSquadReportModal) {
+          setShowSquadReportModal(false);
+        } else if (summaryModalMatch) {
+          setSummaryModalMatch(null);
+        } else if (isJanuaryModalOpen) {
+          setIsJanuaryModalOpen(false);
+        } else if (showScoutingModal) {
+          setShowScoutingModal(false);
+        } else if (showRestartConfirm) {
+          setShowRestartConfirm(false);
+        } else if (showDraftAbandonConfirm) {
+          setShowDraftAbandonConfirm(false);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [
+    showPlayerCareer,
+    showBuildAPlayerStudio,
+    showSurvivalGauntlet,
+    showMysteryWordle,
+    showTeammateChainModal,
+    showOnTheMoneyTombola,
+    showManagerDNA,
+    showSquadReportModal,
+    summaryModalMatch,
+    isJanuaryModalOpen,
+    showScoutingModal,
+    showRestartConfirm,
+    showDraftAbandonConfirm,
+  ]);
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-[#080d15] via-[#0a1019] to-[#06090f] text-[#c9d1d9] flex flex-col font-sans pb-12 select-none overflow-x-hidden">
@@ -2050,65 +2102,89 @@ export function App() {
 
       {/* 2. Build A Player Studio Modal */}
       {showBuildAPlayerStudio && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl overflow-y-auto">
-          <BuildAPlayerStudio
-            onImportPlayerToSquad={player => {
-              setStartingXI((prev: (Player | null)[]) => {
-                const copy = [...prev];
-                const firstEmpty = copy.findIndex(s => s === null);
-                if (firstEmpty !== -1) copy[firstEmpty] = player;
-                else copy[0] = player;
-                return copy;
-              });
-              setShowBuildAPlayerStudio(false);
-            }}
-            onExportToPlayerCareer={builtPlayer => {
-              setPlayerCareerImportCandidate(builtPlayer);
-              setShowBuildAPlayerStudio(false);
-              setShowPlayerCareer(true);
-            }}
-            onExit={() => setShowBuildAPlayerStudio(false)}
-          />
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl overflow-y-auto cursor-pointer"
+          onClick={e => {
+            if (e.target === e.currentTarget) setShowBuildAPlayerStudio(false);
+          }}
+        >
+          <div className="w-full max-w-4xl cursor-default" onClick={e => e.stopPropagation()}>
+            <BuildAPlayerStudio
+              onImportPlayerToSquad={player => {
+                setStartingXI((prev: (Player | null)[]) => {
+                  const copy = [...prev];
+                  const firstEmpty = copy.findIndex(s => s === null);
+                  if (firstEmpty !== -1) copy[firstEmpty] = player;
+                  else copy[0] = player;
+                  return copy;
+                });
+                setShowBuildAPlayerStudio(false);
+              }}
+              onExportToPlayerCareer={builtPlayer => {
+                setPlayerCareerImportCandidate(builtPlayer);
+                setShowBuildAPlayerStudio(false);
+                setShowPlayerCareer(true);
+              }}
+              onExit={() => setShowBuildAPlayerStudio(false)}
+            />
+          </div>
         </div>
       )}
 
       {/* 2B. Player Career Mode Modal */}
       {showPlayerCareer && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl overflow-y-auto">
-          <PlayerCareerMode
-            initialBuiltPlayer={playerCareerImportCandidate}
-            onExit={() => {
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl overflow-y-auto cursor-pointer"
+          onClick={e => {
+            if (e.target === e.currentTarget) {
               setShowPlayerCareer(false);
               setPlayerCareerImportCandidate(null);
-            }}
-          />
+            }
+          }}
+        >
+          <div className="w-full max-w-5xl cursor-default" onClick={e => e.stopPropagation()}>
+            <PlayerCareerMode
+              initialBuiltPlayer={playerCareerImportCandidate}
+              onExit={() => {
+                setShowPlayerCareer(false);
+                setPlayerCareerImportCandidate(null);
+              }}
+            />
+          </div>
         </div>
       )}
 
       {/* 3. Survival Gauntlet Modal */}
       {showSurvivalGauntlet && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl overflow-y-auto">
-          <SurvivalGauntlet
-            startingXI={startingXI}
-            onSimulateRound={async (roundIdx, roundData) => {
-              const res = simulateMatch({
-                userSquad: startingXI,
-                userTactic: manager.tacticalStyle,
-                manager,
-                opponent: roundData.opponent,
-                competition: `Last One Standing - ${roundData.title}`,
-                matchday: roundIdx + 1,
-                isHome: true,
-                formation,
-              });
-              return res;
-            }}
-            onCompleteGauntlet={() => {
-              soundEngine.playCoins();
-              setScoutTokens(prev => prev + 5);
-            }}
-            onExit={() => setShowSurvivalGauntlet(false)}
-          />
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl overflow-y-auto cursor-pointer"
+          onClick={e => {
+            if (e.target === e.currentTarget) setShowSurvivalGauntlet(false);
+          }}
+        >
+          <div className="w-full max-w-4xl cursor-default" onClick={e => e.stopPropagation()}>
+            <SurvivalGauntlet
+              startingXI={startingXI}
+              onSimulateRound={async (roundIdx, roundData) => {
+                const res = simulateMatch({
+                  userSquad: startingXI,
+                  userTactic: manager.tacticalStyle,
+                  manager,
+                  opponent: roundData.opponent,
+                  competition: `Last One Standing - ${roundData.title}`,
+                  matchday: roundIdx + 1,
+                  isHome: true,
+                  formation,
+                });
+                return res;
+              }}
+              onCompleteGauntlet={() => {
+                soundEngine.playCoins();
+                setScoutTokens(prev => prev + 5);
+              }}
+              onExit={() => setShowSurvivalGauntlet(false)}
+            />
+          </div>
         </div>
       )}
 

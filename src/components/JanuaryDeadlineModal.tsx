@@ -81,7 +81,12 @@ export function JanuaryDeadlineModal({
 
   React.useEffect(() => {
     soundEngine.playDeadlineBuzzer();
-  }, []);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
 
   const handleSuperSpin = () => {
     setIsSuperSpinning(true);
@@ -100,8 +105,16 @@ export function JanuaryDeadlineModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-300">
-      <div className="relative w-full max-w-2xl rounded-2xl bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 border border-yellow-500/40 p-5 sm:p-6 shadow-2xl shadow-yellow-500/10 text-white">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-300 cursor-pointer"
+      onClick={e => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="relative w-full max-w-2xl rounded-2xl bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 border border-yellow-500/40 p-5 sm:p-6 shadow-2xl shadow-yellow-500/10 text-white cursor-default"
+        onClick={e => e.stopPropagation()}
+      >
         {/* Sky Sports Deadline Yellow Ticker */}
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-yellow-500 text-slate-950 font-black text-xs tracking-wider uppercase mb-4 shadow">
           <Clock className="w-4 h-4 animate-spin" />

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Player } from '../types/football';
 import { HexagonSkillGraph } from './HexagonSkillGraph';
 import {
@@ -72,9 +72,26 @@ export function SquadReportModal({
     return 'Balanced Modern Total Football';
   }, [squadSkills]);
 
+  // Escape key handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-200 font-mono">
-      <div className="relative w-full max-w-2xl rounded-3xl bg-gradient-to-b from-[#131b26] to-[#0c1219] border border-slate-700/80 shadow-2xl text-white overflow-hidden my-auto max-h-[92vh] flex flex-col">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-4 overflow-y-auto animate-in fade-in duration-200 font-mono cursor-pointer"
+      onClick={e => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        className="relative w-full max-w-2xl rounded-3xl bg-gradient-to-b from-[#131b26] to-[#0c1219] border border-slate-700/80 shadow-2xl text-white overflow-hidden my-auto max-h-[92vh] flex flex-col cursor-default"
+        onClick={e => e.stopPropagation()}
+      >
         {/* Top Header */}
         <div className="h-1.5 w-full bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400" />
 

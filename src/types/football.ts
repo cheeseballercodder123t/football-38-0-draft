@@ -311,7 +311,7 @@ export interface AftergameReport {
   mvpStats: string;
 }
 
-export type PlayerAttributeKey =
+export type OutfieldAttributeKey =
   | 'HEA'
   | 'IQ'
   | 'SHO'
@@ -324,8 +324,23 @@ export type PlayerAttributeKey =
   | 'CTL'
   | 'STA';
 
+export type GKAttributeKey =
+  | 'DIV'
+  | 'HAN'
+  | 'KIC'
+  | 'REF'
+  | 'SPD'
+  | 'POS'
+  | 'AER'
+  | '1V1'
+  | 'IQ'
+  | 'THR'
+  | 'STA';
+
+export type PlayerAttributeKey = OutfieldAttributeKey | GKAttributeKey;
+
 export interface BuildAPlayerAttributeSlot {
-  key: PlayerAttributeKey;
+  key: OutfieldAttributeKey;
   label: string;
   shortDesc: string;
   assignedValue: number | null;
@@ -340,7 +355,7 @@ export interface BuiltPlayerResult {
   tier: 'GOAT' | 'Legend' | 'World Class' | 'Star' | 'Fan Favourite' | 'Cult Hero' | 'Journeyman';
   archetype?: string;
   playstyles?: string[];
-  attributes: Record<PlayerAttributeKey, number>;
+  attributes: Record<string, number>;
   career: {
     ballonDor: number;
     goals: number;
@@ -390,7 +405,16 @@ export interface CareerClub {
 }
 
 export type CareerPosition = 'ST' | 'CAM' | 'LW' | 'RW' | 'CM' | 'CDM' | 'CB' | 'LB' | 'RB' | 'GK';
-export type CareerArchetype = 'Poacher' | 'Playmaker' | 'Speedster' | 'BoxToBox' | 'Anchor' | 'SweeperKeeper';
+export type CareerArchetype =
+  | 'Poacher'
+  | 'Playmaker'
+  | 'Speedster'
+  | 'BoxToBox'
+  | 'Anchor'
+  | 'SweeperKeeper'
+  | 'ShotStopper'
+  | 'CommandingWall'
+  | 'PenaltySpecialist';
 
 export interface CareerMatchMoment {
   id: string;
@@ -429,7 +453,7 @@ export interface PlayerCareerState {
   age: number;
   seasonNumber: number;
   overall: number;
-  attributes: Record<PlayerAttributeKey, number>;
+  attributes: Record<string, number>;
   currentClub: CareerClub;
   contractYearsLeft: number;
   weeklyWageK: number;
