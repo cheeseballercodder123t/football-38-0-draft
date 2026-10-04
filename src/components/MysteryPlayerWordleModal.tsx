@@ -22,7 +22,7 @@ interface MysteryPlayerWordleModalProps {
   onClose: () => void;
 }
 
-export const MYSTERY_POOL: MysteryPlayerClue[] = [
+const MYSTERY_POOL: MysteryPlayerClue[] = [
   // Global Icons & Ballons d'Or
   { name: 'Lionel Messi', club: 'Inter Miami', league: 'MLS', nation: 'Argentina', nationFlag: '🇦🇷', position: 'FWD', overall: 88, age: 37 },
   { name: 'Cristiano Ronaldo', club: 'Al Nassr', league: 'Saudi Pro League', nation: 'Portugal', nationFlag: '🇵🇹', position: 'FWD', overall: 86, age: 39 },
