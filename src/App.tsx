@@ -2108,7 +2108,7 @@ export function App() {
             if (e.target === e.currentTarget) setShowBuildAPlayerStudio(false);
           }}
         >
-          <div className="w-full max-w-4xl cursor-default" onClick={e => e.stopPropagation()}>
+          <div className="w-full max-w-4xl my-auto cursor-default" onClick={e => e.stopPropagation()}>
             <BuildAPlayerStudio
               onImportPlayerToSquad={player => {
                 setStartingXI((prev: (Player | null)[]) => {
@@ -2134,7 +2134,7 @@ export function App() {
       {/* 2B. Player Career Mode Modal */}
       {showPlayerCareer && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-xl overflow-y-auto cursor-pointer"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 bg-black/90 backdrop-blur-xl overflow-y-auto cursor-pointer"
           onClick={e => {
             if (e.target === e.currentTarget) {
               setShowPlayerCareer(false);
@@ -2142,7 +2142,7 @@ export function App() {
             }
           }}
         >
-          <div className="w-full max-w-5xl cursor-default" onClick={e => e.stopPropagation()}>
+          <div className="w-full max-w-5xl my-auto h-[92vh] max-h-[92vh] flex flex-col cursor-default" onClick={e => e.stopPropagation()}>
             <PlayerCareerMode
               initialBuiltPlayer={playerCareerImportCandidate}
               onExit={() => {
@@ -2162,7 +2162,7 @@ export function App() {
             if (e.target === e.currentTarget) setShowSurvivalGauntlet(false);
           }}
         >
-          <div className="w-full max-w-4xl cursor-default" onClick={e => e.stopPropagation()}>
+          <div className="w-full max-w-4xl my-auto cursor-default" onClick={e => e.stopPropagation()}>
             <SurvivalGauntlet
               startingXI={startingXI}
               onSimulateRound={async (roundIdx, roundData) => {

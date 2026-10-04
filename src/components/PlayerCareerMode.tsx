@@ -222,14 +222,14 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
   // 1. Setup Screen if no active career
   if (!careerState) {
     return (
-      <div className="w-full max-w-4xl mx-auto bg-slate-950/95 border border-amber-500/30 rounded-3xl p-6 sm:p-8 backdrop-blur-2xl shadow-2xl text-white">
-        <div className="flex items-center justify-between pb-6 border-b border-slate-800">
+      <div className="w-full max-w-4xl mx-auto bg-slate-950/98 border border-amber-500/30 rounded-3xl backdrop-blur-2xl shadow-2xl text-white max-h-[90vh] sm:max-h-[92vh] h-full flex flex-col overflow-hidden my-auto">
+        <div className="flex items-center justify-between p-5 sm:p-6 pb-4 sm:pb-5 border-b border-slate-800 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
               <Crown className="w-7 h-7" />
             </div>
             <div>
-              <h1 className="text-2xl font-black tracking-tight text-white flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
                 PLAYER CAREER MODE
                 <span className="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
                   PRO EVOLUTION 2.0
@@ -242,13 +242,15 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
           </div>
           <button
             onClick={onExit}
-            className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-all"
+            className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-400 hover:text-white transition-all cursor-pointer"
+            title="Exit (Esc)"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="p-5 sm:p-6 flex-1 overflow-y-auto min-h-0 overscroll-contain">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left Column: Player Identity */}
           <div className="space-y-4">
             <div>
@@ -352,17 +354,18 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-800/80 flex items-center justify-between">
+      <div className="p-4 sm:p-5 border-t border-slate-800/80 flex items-center justify-between shrink-0 bg-slate-950/95">
           <button
             onClick={onExit}
-            className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-all"
+            className="px-5 py-2.5 rounded-xl text-xs font-bold text-slate-400 hover:text-white transition-all cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleStartCareer}
-            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm tracking-wide shadow-xl shadow-amber-500/25 flex items-center gap-2 transform active:scale-95 transition-all"
+            className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm tracking-wide shadow-xl shadow-amber-500/25 flex items-center gap-2 transform active:scale-95 transition-all cursor-pointer"
           >
             <Play className="w-4 h-4 fill-current" />
             BEGIN CAREER PATH
@@ -376,9 +379,9 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
   const goatAnalysis = calculateGOATScore(careerState);
 
   return (
-    <div className="w-full max-w-5xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl text-white flex flex-col">
-      {/* Top Banner & Header (Sticky so navigation and exit are never lost) */}
-      <div className="sticky top-0 z-30 bg-slate-950/95 backdrop-blur-xl p-5 sm:p-6 border-b border-slate-800 shadow-xl">
+    <div className="w-full max-w-5xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl text-white flex flex-col max-h-[90vh] sm:max-h-[92vh] h-full my-auto">
+      {/* Top Banner & Header (Pinned so navigation and stats are never lost) */}
+      <div className="shrink-0 z-30 bg-slate-950/98 backdrop-blur-xl p-4 sm:p-6 pb-3 sm:pb-4 border-b border-slate-800 shadow-xl">
         <div className="flex flex-wrap items-center justify-between gap-4">
           {/* Player Badge & Core Info */}
           <div className="flex items-center gap-4">
@@ -473,7 +476,7 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
       </div>
 
       {/* Main Content Body */}
-      <div className="p-5 sm:p-6 flex-1 overflow-y-auto">
+      <div className="p-4 sm:p-6 flex-1 overflow-y-auto min-h-0 overscroll-contain">
         {/* TAB 1: MATCHDAY & FIXTURES */}
         {activeTab === 'fixtures' && (
           <div className="space-y-6">
@@ -921,8 +924,14 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
 
       {/* Season End Celebration Modal if active */}
       {seasonEndReport && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl">
-          <div className="w-full max-w-lg p-6 rounded-3xl bg-slate-900 border border-amber-500/40 text-center text-white">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl overflow-y-auto cursor-pointer"
+          onClick={() => setSeasonEndReport(null)}
+        >
+          <div
+            className="w-full max-w-lg p-6 rounded-3xl bg-slate-900 border border-amber-500/40 text-center text-white my-auto max-h-[90vh] overflow-y-auto cursor-default"
+            onClick={e => e.stopPropagation()}
+          >
             <Trophy className="w-14 h-14 text-amber-400 mx-auto mb-2 animate-bounce" />
             <h2 className="text-2xl font-black">SEASON CONCLUDED!</h2>
             <p className="text-xs text-slate-400 mt-1">
