@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Tactical Draft: 38-0</string>
+    <string name="title_activity_main">Tactical Draft: 38-0</string>
+    <string name="package_name">com.footballdraft.app</string>
+    <string name="custom_url_scheme">com.footballdraft.app</string>
+</resources>

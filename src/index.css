@@ -1,0 +1,336 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', Helvetica, Arial, sans-serif;
+  color-scheme: dark;
+}
+
+/* Fast, smooth, responsive scrolling */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090d14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1c2331;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2a3449;
+}
+
+/* Mobile safe area */
+.safe-top {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Lightweight Radar Sonar Wave Pulse for Perfect Fit Target */
+@keyframes radarWave {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.38);
+    opacity: 0;
+  }
+}
+
+.animate-radar-wave {
+  animation: radarWave 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+  will-change: transform, opacity;
+}
+
+/* Holographic Sheen Sweep for Collectible Trading Cards */
+@keyframes holoSheen {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.holo-sheen {
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.08) 35%,
+    rgba(255, 215, 0, 0.15) 50%,
+    rgba(255, 255, 255, 0.08) 65%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  animation: holoSheen 6s ease-in-out infinite;
+}
+
+/* Card Metallic Foils */
+.card-foil-gold {
+  background: linear-gradient(145deg, #1f1809 0%, #120e06 50%, #1a1407 100%);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  box-shadow: 0 4px 20px -2px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(255, 215, 0, 0.25);
+}
+
+.card-foil-epic {
+  background: linear-gradient(145deg, #1b0e2b 0%, #0d0716 50%, #170b24 100%);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  box-shadow: 0 4px 20px -2px rgba(168, 85, 247, 0.18), inset 0 1px 0 rgba(216, 180, 254, 0.25);
+}
+
+.card-foil-rare {
+  background: linear-gradient(145deg, #091a2e 0%, #050d18 50%, #081729 100%);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  box-shadow: 0 4px 20px -2px rgba(56, 189, 248, 0.18), inset 0 1px 0 rgba(186, 230, 253, 0.25);
+}
+
+.card-foil-standard {
+  background: linear-gradient(145deg, #131923 0%, #0c1017 50%, #10151e 100%);
+  border: 1px solid rgba(51, 65, 85, 0.5);
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* Realistic Stadium Floodlight Vignette */
+.stadium-floodlight {
+  background: 
+    radial-gradient(ellipse at 50% 50%, rgba(34, 197, 94, 0.14) 0%, transparent 70%),
+    radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 10% 90%, rgba(255, 255, 255, 0.06) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.06) 0%, transparent 40%),
+    repeating-linear-gradient(180deg, #081f12 0px, #081f12 40px, #0b2717 40px, #0b2717 80px);
+}
+
+/* Subtle Goal Net Pattern */
+.goal-net-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+/* Cylinder Reel 3D Perspective Shading */
+.reel-cylinder-shade {
+  background: linear-gradient(
+    180deg,
+    rgba(7, 10, 15, 0.85) 0%,
+    rgba(7, 10, 15, 0.15) 25%,
+    rgba(7, 10, 15, 0) 50%,
+    rgba(7, 10, 15, 0.15) 75%,
+    rgba(7, 10, 15, 0.85) 100%
+  );
+}
+
+/* Tactical Glassmorphism */
+.tactical-glass {
+  background: rgba(18, 24, 38, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ========================================================================= */
+/* DIVINE VISUAL SYSTEM: GOD-RAYS, PRISMATIC SHIMMER & LUXURY GLASS           */
+/* ========================================================================= */
+
+@keyframes divineGodRays {
+  0% {
+    transform: translate3d(-50%, -50%, 0) rotate(0deg);
+    opacity: 0.22;
+  }
+  50% {
+    transform: translate3d(-50%, -50%, 0) rotate(180deg);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate3d(-50%, -50%, 0) rotate(360deg);
+    opacity: 0.22;
+  }
+}
+
+.animate-divine-rays {
+  animation: divineGodRays 32s linear infinite;
+  will-change: transform;
+  transform: translate3d(-50%, -50%, 0);
+  pointer-events: none;
+}
+
+@keyframes laserDash {
+  0% {
+    stroke-dashoffset: 24;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-laser-flow {
+  animation: laserDash 1.2s linear infinite;
+}
+
+@keyframes divineBreathingGlow {
+  0%, 100% {
+    box-shadow: 0 0 25px -4px rgba(245, 158, 11, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    border-color: rgba(245, 158, 11, 0.75);
+  }
+  50% {
+    box-shadow: 0 0 45px 4px rgba(245, 158, 11, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    border-color: rgba(251, 191, 36, 1);
+  }
+}
+
+.divine-glow-gold {
+  animation: divineBreathingGlow 3s ease-in-out infinite;
+}
+
+@keyframes divineEmeraldGlow {
+  0%, 100% {
+    box-shadow: 0 0 25px -4px rgba(52, 211, 153, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    border-color: rgba(52, 211, 153, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 45px 4px rgba(52, 211, 153, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    border-color: rgba(16, 185, 129, 1);
+  }
+}
+
+.divine-glow-emerald {
+  animation: divineEmeraldGlow 3s ease-in-out infinite;
+}
+
+/* Divine Glassmorphic Surface */
+.divine-glass {
+  background: rgba(13, 20, 32, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.65), inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+}
+
+.divine-glass-gold {
+  background: linear-gradient(135deg, rgba(35, 24, 7, 0.85) 0%, rgba(18, 14, 6, 0.9) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  box-shadow: 0 12px 40px 0 rgba(245, 158, 11, 0.22), inset 0 1px 0 0 rgba(255, 215, 0, 0.35);
+}
+
+/* Masterpiece Stadium Turf with Volumetric Floodlights */
+.divine-turf {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(34, 197, 94, 0.22) 0%, transparent 75%),
+    radial-gradient(circle at 10% 8%, rgba(255, 255, 255, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 90% 8%, rgba(255, 255, 255, 0.14) 0%, transparent 45%),
+    radial-gradient(circle at 10% 92%, rgba(255, 255, 255, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 90% 92%, rgba(255, 255, 255, 0.12) 0%, transparent 45%),
+    repeating-linear-gradient(180deg, #092113 0px, #092113 36px, #0c2d1b 36px, #0c2d1b 72px);
+}
+
+/* Prismatic Rainbow Oil-Slick Card Sheen */
+.prismatic-foil {
+  position: relative;
+  overflow: hidden;
+}
+
+.prismatic-foil::after {
+  content: '';
+  position: absolute;
+  inset: -100%;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 0, 128, 0.08) 35%,
+    rgba(0, 255, 255, 0.14) 45%,
+    rgba(255, 215, 0, 0.2) 50%,
+    rgba(128, 0, 255, 0.12) 55%,
+    rgba(0, 255, 128, 0.08) 65%,
+    transparent 80%
+  );
+  transform: rotate(25deg);
+  pointer-events: none;
+  animation: holoSheen 5s ease-in-out infinite;
+}
+
+/* ========================================================================= */
+/* CINEMATIC WALKOUT ANIMATIONS (EA FC ULTRA-TIER STADIUM CEREMONY)          */
+/* ========================================================================= */
+
+@keyframes sweepLaserLeft {
+  0% {
+    transform: rotate(-35deg) scaleY(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: rotate(15deg) scaleY(1.3);
+    opacity: 0.9;
+  }
+  100% {
+    transform: rotate(-35deg) scaleY(1);
+    opacity: 0.45;
+  }
+}
+
+@keyframes sweepLaserRight {
+  0% {
+    transform: rotate(35deg) scaleY(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: rotate(-15deg) scaleY(1.3);
+    opacity: 0.9;
+  }
+  100% {
+    transform: rotate(35deg) scaleY(1);
+    opacity: 0.45;
+  }
+}
+
+.animate-laser-left {
+  animation: sweepLaserLeft 4.5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+.animate-laser-right {
+  animation: sweepLaserRight 4.5s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+@keyframes strobeFlash {
+  0% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animate-strobe-flash {
+  animation: strobeFlash 0.6s ease-out forwards;
+}
+
+@keyframes stadiumTunnelWalk {
+  0% {
+    transform: scale(0.65) translateY(40px);
+    opacity: 0;
+    filter: blur(10px);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+    filter: blur(0px);
+  }
+}
+
+.animate-tunnel-walk {
+  animation: stadiumTunnelWalk 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
