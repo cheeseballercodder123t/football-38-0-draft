@@ -131,14 +131,57 @@ const MYSTERY_POOL: MysteryPlayerClue[] = [
   { name: 'Nico Schlotterbeck', club: 'Borussia Dortmund', league: 'Bundesliga', nation: 'Germany', nationFlag: '🇩🇪', position: 'DEF', overall: 85, age: 24 },
   { name: 'Xavi Simons', club: 'RB Leipzig', league: 'Bundesliga', nation: 'Netherlands', nationFlag: '🇳🇱', position: 'MID', overall: 83, age: 21 },
 
-  // Ligue 1 & European Phenoms
   { name: 'Gianluigi Donnarumma', club: 'PSG', league: 'Ligue 1', nation: 'Italy', nationFlag: '🇮🇹', position: 'GK', overall: 89, age: 25 },
   { name: 'Achraf Hakimi', club: 'PSG', league: 'Ligue 1', nation: 'Morocco', nationFlag: '🇲🇦', position: 'DEF', overall: 84, age: 25 },
   { name: 'Marquinhos', club: 'PSG', league: 'Ligue 1', nation: 'Brazil', nationFlag: '🇧🇷', position: 'DEF', overall: 87, age: 30 },
   { name: 'Ousmane Dembélé', club: 'PSG', league: 'Ligue 1', nation: 'France', nationFlag: '🇫🇷', position: 'FWD', overall: 86, age: 27 },
   { name: 'Vitinha', club: 'PSG', league: 'Ligue 1', nation: 'Portugal', nationFlag: '🇵🇹', position: 'MID', overall: 85, age: 24 },
   { name: 'Bradley Barcola', club: 'PSG', league: 'Ligue 1', nation: 'France', nationFlag: '🇫🇷', position: 'FWD', overall: 82, age: 22 },
+  { name: 'Jonathan David', club: 'Lille', league: 'Ligue 1', nation: 'Canada', nationFlag: '🇨🇦', position: 'FWD', overall: 82, age: 24 },
   { name: 'Viktor Gyökeres', club: 'Sporting CP', league: 'Liga Portugal', nation: 'Sweden', nationFlag: '🇸🇪', position: 'FWD', overall: 84, age: 26 },
+  { name: 'Ángel Di María', club: 'Benfica', league: 'Liga Portugal', nation: 'Argentina', nationFlag: '🇦🇷', position: 'FWD', overall: 83, age: 36 },
+
+  // Rising Stars & Expanded European Talent
+  { name: 'Gabriel Martinelli', club: 'Arsenal', league: 'Premier League', nation: 'Brazil', nationFlag: '🇧🇷', position: 'FWD', overall: 84, age: 23 },
+  { name: 'Kai Havertz', club: 'Arsenal', league: 'Premier League', nation: 'Germany', nationFlag: '🇩🇪', position: 'FWD', overall: 83, age: 25 },
+  { name: 'Enzo Fernández', club: 'Chelsea', league: 'Premier League', nation: 'Argentina', nationFlag: '🇦🇷', position: 'MID', overall: 83, age: 23 },
+  { name: 'Moisés Caicedo', club: 'Chelsea', league: 'Premier League', nation: 'Ecuador', nationFlag: '🇪🇨', position: 'MID', overall: 83, age: 22 },
+  { name: 'Marcus Rashford', club: 'Man United', league: 'Premier League', nation: 'England', nationFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', position: 'FWD', overall: 83, age: 26 },
+  { name: 'Kobbie Mainoo', club: 'Man United', league: 'Premier League', nation: 'England', nationFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', position: 'MID', overall: 80, age: 19 },
+  { name: 'James Maddison', club: 'Tottenham', league: 'Premier League', nation: 'England', nationFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', position: 'MID', overall: 84, age: 27 },
+  { name: 'Micky van de Ven', club: 'Tottenham', league: 'Premier League', nation: 'Netherlands', nationFlag: '🇳🇱', position: 'DEF', overall: 82, age: 23 },
+  { name: 'Jarrod Bowen', club: 'West Ham', league: 'Premier League', nation: 'England', nationFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', position: 'FWD', overall: 83, age: 27 },
+  { name: 'Eberechi Eze', club: 'Crystal Palace', league: 'Premier League', nation: 'England', nationFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', position: 'MID', overall: 82, age: 26 },
+  { name: 'Bryan Mbeumo', club: 'Brentford', league: 'Premier League', nation: 'Cameroon', nationFlag: '🇨🇲', position: 'FWD', overall: 81, age: 25 },
+  { name: 'Emiliano Martínez', club: 'Aston Villa', league: 'Premier League', nation: 'Argentina', nationFlag: '🇦🇷', position: 'GK', overall: 87, age: 32 },
+
+  { name: 'Nico Williams', club: 'Athletic Bilbao', league: 'La Liga', nation: 'Spain', nationFlag: '🇪🇸', position: 'FWD', overall: 85, age: 22 },
+  { name: 'Pau Cubarsí', club: 'Barcelona', league: 'La Liga', nation: 'Spain', nationFlag: '🇪🇸', position: 'DEF', overall: 81, age: 17 },
+  { name: 'Alexander Sørloth', club: 'Atlético Madrid', league: 'La Liga', nation: 'Norway', nationFlag: '🇳🇴', position: 'FWD', overall: 83, age: 28 },
+  { name: 'Isco', club: 'Real Betis', league: 'La Liga', nation: 'Spain', nationFlag: '🇪🇸', position: 'MID', overall: 83, age: 32 },
+  { name: 'Iago Aspas', club: 'Celta Vigo', league: 'La Liga', nation: 'Spain', nationFlag: '🇪🇸', position: 'FWD', overall: 83, age: 37 },
+
+  { name: 'Christian Pulisic', club: 'AC Milan', league: 'Serie A', nation: 'USA', nationFlag: '🇺🇸', position: 'FWD', overall: 83, age: 26 },
+  { name: 'Scott McTominay', club: 'Napoli', league: 'Serie A', nation: 'Scotland', nationFlag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿', position: 'MID', overall: 81, age: 27 },
+  { name: 'Kenan Yıldız', club: 'Juventus', league: 'Serie A', nation: 'Turkey', nationFlag: '🇹🇷', position: 'FWD', overall: 80, age: 19 },
+  { name: 'Artem Dovbyk', club: 'Roma', league: 'Serie A', nation: 'Ukraine', nationFlag: '🇺🇦', position: 'FWD', overall: 84, age: 27 },
+  { name: 'Victor Boniface', club: 'Bayer Leverkusen', league: 'Bundesliga', nation: 'Nigeria', nationFlag: '🇳🇬', position: 'FWD', overall: 83, age: 23 },
+  { name: 'Julian Brandt', club: 'Borussia Dortmund', league: 'Bundesliga', nation: 'Germany', nationFlag: '🇩🇪', position: 'MID', overall: 84, age: 28 },
+  { name: 'Loïs Openda', club: 'RB Leipzig', league: 'Bundesliga', nation: 'Belgium', nationFlag: '🇧🇪', position: 'FWD', overall: 85, age: 24 },
+
+  // All-Time Legendary Icons
+  { name: 'Zinedine Zidane', club: 'Real Madrid', league: 'La Liga', nation: 'France', nationFlag: '🇫🇷', position: 'MID', overall: 96, age: 52 },
+  { name: 'Ronaldinho', club: 'Barcelona', league: 'La Liga', nation: 'Brazil', nationFlag: '🇧🇷', position: 'FWD', overall: 94, age: 44 },
+  { name: 'Thierry Henry', club: 'Arsenal', league: 'Premier League', nation: 'France', nationFlag: '🇫🇷', position: 'FWD', overall: 93, age: 47 },
+  { name: 'Andrea Pirlo', club: 'Juventus', league: 'Serie A', nation: 'Italy', nationFlag: '🇮🇹', position: 'MID', overall: 92, age: 45 },
+  { name: 'Kaká', club: 'AC Milan', league: 'Serie A', nation: 'Brazil', nationFlag: '🇧🇷', position: 'MID', overall: 92, age: 42 },
+  { name: 'Wayne Rooney', club: 'Man United', league: 'Premier League', nation: 'England', nationFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', position: 'FWD', overall: 91, age: 38 },
+  { name: 'Steven Gerrard', club: 'Liverpool', league: 'Premier League', nation: 'England', nationFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', position: 'MID', overall: 91, age: 44 },
+  { name: 'Frank Lampard', club: 'Chelsea', league: 'Premier League', nation: 'England', nationFlag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', position: 'MID', overall: 90, age: 46 },
+  { name: 'Sergio Ramos', club: 'Real Madrid', league: 'La Liga', nation: 'Spain', nationFlag: '🇪🇸', position: 'DEF', overall: 92, age: 38 },
+  { name: 'Carles Puyol', club: 'Barcelona', league: 'La Liga', nation: 'Spain', nationFlag: '🇪🇸', position: 'DEF', overall: 90, age: 46 },
+  { name: 'Iker Casillas', club: 'Real Madrid', league: 'La Liga', nation: 'Spain', nationFlag: '🇪🇸', position: 'GK', overall: 92, age: 43 },
+  { name: 'Gianluigi Buffon', club: 'Juventus', league: 'Serie A', nation: 'Italy', nationFlag: '🇮🇹', position: 'GK', overall: 93, age: 46 },
 ];
 
 export function MysteryPlayerWordleModal({
@@ -234,7 +277,9 @@ export function MysteryPlayerWordleModal({
 
   const handleResetGame = () => {
     soundEngine.playClick();
-    setTargetPlayer(MYSTERY_POOL[Math.floor(Math.random() * MYSTERY_POOL.length)]);
+    const otherPool = MYSTERY_POOL.filter(p => p.name !== targetPlayer.name);
+    const nextTarget = otherPool[Math.floor(Math.random() * otherPool.length)] || MYSTERY_POOL[0];
+    setTargetPlayer(nextTarget);
     setGuesses([]);
     setIsGameOver(false);
     setIsWon(false);

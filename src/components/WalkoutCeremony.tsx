@@ -14,6 +14,11 @@ export const WalkoutCeremony: React.FC<WalkoutCeremonyProps> = ({ player, onDism
   const [tilt, setTilt] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const stageRef = useRef<number>(stage);
+
+  useEffect(() => {
+    stageRef.current = stage;
+  }, [stage]);
 
   const clearAllTimers = () => {
     timersRef.current.forEach(t => clearTimeout(t));
@@ -26,6 +31,7 @@ export const WalkoutCeremony: React.FC<WalkoutCeremonyProps> = ({ player, onDism
     setTimeout(() => setStrobe(false), 500);
     soundEngine.playWalkoutFirework();
     setStage(4);
+    stageRef.current = 4;
   };
 
   const handleDirectSkip = () => {
@@ -38,18 +44,21 @@ export const WalkoutCeremony: React.FC<WalkoutCeremonyProps> = ({ player, onDism
 
     const t1 = setTimeout(() => {
       setStage(1);
+      stageRef.current = 1;
       soundEngine.playWalkoutStageReveal();
     }, 600); // Stage 1: Nation
     timersRef.current.push(t1);
 
     const t2 = setTimeout(() => {
       setStage(2);
+      stageRef.current = 2;
       soundEngine.playWalkoutStageReveal();
     }, 1400); // Stage 2: Position
     timersRef.current.push(t2);
 
     const t3 = setTimeout(() => {
       setStage(3);
+      stageRef.current = 3;
       soundEngine.playWalkoutStageReveal();
     }, 2200); // Stage 3: Club
     timersRef.current.push(t3);
@@ -58,6 +67,7 @@ export const WalkoutCeremony: React.FC<WalkoutCeremonyProps> = ({ player, onDism
       setStrobe(true);
       setTimeout(() => setStrobe(false), 500);
       setStage(4);
+      stageRef.current = 4;
       soundEngine.playWalkoutFirework();
     }, 3000); // Stage 4: Grand Card Reveal & Fireworks
     timersRef.current.push(t4);
@@ -66,7 +76,7 @@ export const WalkoutCeremony: React.FC<WalkoutCeremonyProps> = ({ player, onDism
       if (e.key === 'Escape') {
         handleDirectSkip();
       } else if (e.key === ' ' || e.key === 'Enter') {
-        if (stage < 4) {
+        if (stageRef.current < 4) {
           handleFastReveal();
         } else {
           handleDirectSkip();

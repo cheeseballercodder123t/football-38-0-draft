@@ -222,7 +222,7 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
   // 1. Setup Screen if no active career
   if (!careerState) {
     return (
-      <div className="w-full max-w-4xl mx-auto bg-slate-950/98 border border-amber-500/30 rounded-3xl backdrop-blur-2xl shadow-2xl text-white max-h-[90vh] sm:max-h-[92vh] h-full flex flex-col overflow-hidden my-auto">
+      <div className="w-full max-w-4xl mx-auto bg-slate-950/98 border border-amber-500/30 rounded-3xl backdrop-blur-2xl shadow-2xl text-white h-full max-h-[92vh] min-h-0 flex flex-col overflow-hidden my-auto">
         <div className="flex items-center justify-between p-5 sm:p-6 pb-4 sm:pb-5 border-b border-slate-800 shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
@@ -249,7 +249,7 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
           </button>
         </div>
 
-        <div className="p-5 sm:p-6 flex-1 overflow-y-auto min-h-0 overscroll-contain">
+        <div className="p-5 sm:p-6 flex-1 overflow-y-auto min-h-0 overscroll-contain focus:outline-none">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Left Column: Player Identity */}
           <div className="space-y-4">
@@ -379,7 +379,7 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
   const goatAnalysis = calculateGOATScore(careerState);
 
   return (
-    <div className="w-full max-w-5xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl text-white flex flex-col max-h-[90vh] sm:max-h-[92vh] h-full my-auto">
+    <div className="w-full max-w-5xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl text-white flex flex-col h-full max-h-[92vh] min-h-0 my-auto">
       {/* Top Banner & Header (Pinned so navigation and stats are never lost) */}
       <div className="shrink-0 z-30 bg-slate-950/98 backdrop-blur-xl p-4 sm:p-6 pb-3 sm:pb-4 border-b border-slate-800 shadow-xl">
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -446,7 +446,7 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex items-center gap-2 mt-6">
+        <div className="flex items-center gap-2 mt-6 overflow-x-auto pb-1 overscroll-contain">
           {[
             { id: 'fixtures', label: 'Matchday & Fixtures', icon: Play },
             { id: 'training', label: 'Training & Skill Tree', icon: Zap },
@@ -461,7 +461,7 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
                   soundEngine.playClick();
                   setActiveTab(tab.id as typeof activeTab);
                 }}
-                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all ${
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all shrink-0 ${
                   activeTab === tab.id
                     ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
                     : 'bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800'
@@ -476,7 +476,7 @@ export function PlayerCareerMode({ initialBuiltPlayer, onExit }: PlayerCareerMod
       </div>
 
       {/* Main Content Body */}
-      <div className="p-4 sm:p-6 flex-1 overflow-y-auto min-h-0 overscroll-contain">
+      <div className="p-4 sm:p-6 flex-1 overflow-y-auto min-h-0 overscroll-contain focus:outline-none">
         {/* TAB 1: MATCHDAY & FIXTURES */}
         {activeTab === 'fixtures' && (
           <div className="space-y-6">

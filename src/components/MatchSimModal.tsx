@@ -1129,6 +1129,18 @@ export const MatchSimModal: React.FC<MatchSimModalProps> = ({
                   )}
                 </div>
               )}
+              {match.penalties && currentMinute >= maxMinute && (
+                <div className="mt-1.5 font-mono text-center">
+                  <span className="inline-block px-3 py-1 rounded-lg bg-amber-950/90 border border-amber-400 text-amber-300 text-[10px] font-black tracking-widest uppercase shadow-md shadow-amber-950/60 animate-in fade-in duration-300">
+                    SHOOTOUT: {match.penalties.home} - {match.penalties.away} (PENS)
+                    {match.winner === 'home'
+                      ? ` · ${match.homeTeam.toUpperCase()} WIN`
+                      : match.winner === 'away'
+                      ? ` · ${match.awayTeam.toUpperCase()} WIN`
+                      : ''}
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Away Team */}
@@ -2575,6 +2587,10 @@ export const MatchSimModal: React.FC<MatchSimModalProps> = ({
                 />
                 {match.isTwoLegged && match.leg === 1
                   ? 'LEG 1 CONCLUDED'
+                  : match.penalties
+                  ? 'FULL-TIME (PENS)'
+                  : match.extraTime
+                  ? 'FULL-TIME (AET)'
                   : isUserEliminatedInMatch
                   ? 'TIE CONCLUDED'
                   : 'CONCLUDED'}

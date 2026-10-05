@@ -26,9 +26,116 @@ import {
 import { SQUADS, getEligibleSquads } from '../data/squads';
 import { MANAGERS } from '../data/managers';
 import { FORMATIONS } from '../data/formations';
-import { getLeagueOpponents, UCL_OPPONENTS, WORLD_CUP_OPPONENTS } from '../data/opponents';
+import {
+  getLeagueOpponents,
+  UCL_OPPONENTS,
+  WORLD_CUP_OPPONENTS,
+  LA_LIGA_HARDEST_OPPONENTS,
+  PREMIER_LEAGUE_HARDEST_OPPONENTS,
+  SERIE_A_HARDEST_OPPONENTS,
+  RIVALRY_DERBY_OPPONENTS,
+  ROGUELIKE_BOSS_OPPONENTS,
+} from '../data/opponents';
 import { getRandomRoguelikePerks } from '../data/perks';
 import { simulateMatch, calculateSeasonAwards } from '../engine/simulationEngine';
+
+const ALL_OPPONENTS_CACHE: OpponentTeam[] = [
+  ...LA_LIGA_HARDEST_OPPONENTS,
+  ...PREMIER_LEAGUE_HARDEST_OPPONENTS,
+  ...SERIE_A_HARDEST_OPPONENTS,
+  ...UCL_OPPONENTS,
+  ...WORLD_CUP_OPPONENTS,
+  ...RIVALRY_DERBY_OPPONENTS,
+  ...ROGUELIKE_BOSS_OPPONENTS,
+];
+
+function resolveTeamRatings(
+  teamName: string,
+  opps: OpponentTeam[]
+): { rating: number; attackRating: number; defenseRating: number } {
+  // 1. Direct match in current mode opps
+  const direct = opps.find(o => o.name.toLowerCase() === teamName.toLowerCase());
+  if (direct) {
+    return {
+      rating: direct.rating,
+      attackRating: direct.attackRating ?? direct.rating,
+      defenseRating: direct.defenseRating ?? direct.rating,
+    };
+  }
+
+  // 2. Partial match in current mode opps
+  const partial = opps.find(
+    o =>
+      o.name.toLowerCase().includes(teamName.toLowerCase()) ||
+      teamName.toLowerCase().includes(o.name.toLowerCase())
+  );
+  if (partial) {
+    return {
+      rating: partial.rating,
+      attackRating: partial.attackRating ?? partial.rating,
+      defenseRating: partial.defenseRating ?? partial.rating,
+    };
+  }
+
+  // 3. Fallback across all opponents
+  const globalDirect = ALL_OPPONENTS_CACHE.find(
+    o => o.name.toLowerCase() === teamName.toLowerCase()
+  );
+  if (globalDirect) {
+    return {
+      rating: globalDirect.rating,
+      attackRating: globalDirect.attackRating ?? globalDirect.rating,
+      defenseRating: globalDirect.defenseRating ?? globalDirect.rating,
+    };
+  }
+
+  const globalPartial = ALL_OPPONENTS_CACHE.find(
+    o =>
+      o.name.toLowerCase().includes(teamName.toLowerCase()) ||
+      teamName.toLowerCase().includes(o.name.toLowerCase())
+  );
+  if (globalPartial) {
+    return {
+      rating: globalPartial.rating,
+      attackRating: globalPartial.attackRating ?? globalPartial.rating,
+      defenseRating: globalPartial.defenseRating ?? globalPartial.rating,
+    };
+  }
+
+  // 4. Known club heuristics
+  const lower = teamName.toLowerCase();
+  if (
+    lower.includes('real madrid') ||
+    lower.includes('barcelona') ||
+    lower.includes('manchester city') ||
+    lower.includes('bayern')
+  ) {
+    return { rating: 93, attackRating: 95, defenseRating: 91 };
+  }
+  if (
+    lower.includes('liverpool') ||
+    lower.includes('arsenal') ||
+    lower.includes('milan') ||
+    lower.includes('juventus') ||
+    lower.includes('inter') ||
+    lower.includes('psg') ||
+    lower.includes('chelsea')
+  ) {
+    return { rating: 89, attackRating: 90, defenseRating: 88 };
+  }
+  if (
+    lower.includes('atletico') ||
+    lower.includes('tottenham') ||
+    lower.includes('dortmund') ||
+    lower.includes('napoli') ||
+    lower.includes('united')
+  ) {
+    return { rating: 86, attackRating: 87, defenseRating: 86 };
+  }
+
+  // Default mid-tier fallback
+  return { rating: 80, attackRating: 80, defenseRating: 80 };
+}
 import {
   initializeDynastyState,
   processSeasonAdvance,
@@ -736,15 +843,40 @@ export function useDraftSim() {
 
   // Realistic Rating-Based AI League Match Simulator
   const simulateAiTeamMatch = (entry: SeasonTableEntry, opps: OpponentTeam[]) => {
-    const opp = opps.find(o => o.name === entry.team);
-    const teamRating = opp?.rating ?? 81;
-    const teamAtt = opp?.attackRating ?? teamRating;
-    const teamDef = opp?.defenseRating ?? teamRating;
+    const { rating: teamRating, attackRating: teamAtt, defenseRating: teamDef } = resolveTeamRatings(
+      entry.team,
+      opps
+    );
 
-    // Benchmark against average league opponent (82 OVR)
-    const delta = teamRating - 82;
-    const winProb = Math.min(0.86, Math.max(0.12, 0.38 + delta * 0.035 + (Math.random() * 0.04 - 0.02)));
-    const drawProb = Math.max(0.08, 0.25 - Math.abs(delta) * 0.008 + (Math.random() * 0.03 - 0.015));
+    // Realistic tiered probability curve
+    let winProb: number;
+    let drawProb: number;
+
+    if (teamRating >= 94) {
+      winProb = 0.83 + (Math.random() * 0.04 - 0.02);
+      drawProb = 0.11 + (Math.random() * 0.02 - 0.01);
+    } else if (teamRating >= 92) {
+      winProb = 0.76 + (Math.random() * 0.04 - 0.02);
+      drawProb = 0.14 + (Math.random() * 0.03 - 0.015);
+    } else if (teamRating >= 88) {
+      winProb = 0.65 + (Math.random() * 0.04 - 0.02);
+      drawProb = 0.18 + (Math.random() * 0.03 - 0.015);
+    } else if (teamRating >= 84) {
+      winProb = 0.52 + (Math.random() * 0.05 - 0.025);
+      drawProb = 0.24 + (Math.random() * 0.03 - 0.015);
+    } else if (teamRating >= 81) {
+      winProb = 0.40 + (Math.random() * 0.05 - 0.025);
+      drawProb = 0.27 + (Math.random() * 0.03 - 0.015);
+    } else if (teamRating >= 78) {
+      winProb = 0.29 + (Math.random() * 0.04 - 0.02);
+      drawProb = 0.26 + (Math.random() * 0.03 - 0.015);
+    } else {
+      winProb = 0.18 + (Math.random() * 0.04 - 0.02);
+      drawProb = 0.22 + (Math.random() * 0.03 - 0.015);
+    }
+
+    winProb = Math.min(0.92, Math.max(0.08, winProb));
+    drawProb = Math.min(0.35, Math.max(0.06, drawProb));
 
     const roll = Math.random();
     const isWin = roll < winProb;
@@ -754,11 +886,11 @@ export function useDraftSim() {
     let matchGa = 0;
 
     if (isWin) {
-      matchGf = Math.max(1, Math.round(1.5 + (teamAtt - 80) * 0.07 + Math.random() * 1.8));
+      matchGf = Math.max(1, Math.round(1.5 + (teamAtt - 80) * 0.08 + Math.random() * 1.8));
       matchGa = Math.max(0, Math.round(0.7 - (teamDef - 80) * 0.04 + Math.random() * 0.8));
       if (matchGf <= matchGa) matchGf = matchGa + 1;
     } else if (isDraw) {
-      const goals = Math.random() < 0.32 ? 0 : Math.random() < 0.65 ? 1 : 2;
+      const goals = Math.random() < 0.35 ? 0 : Math.random() < 0.65 ? 1 : 2;
       matchGf = goals;
       matchGa = goals;
     } else {
@@ -1314,6 +1446,8 @@ export function useDraftSim() {
   // Home & Restart
   const handleGoHome = () => {
     setIsTournamentEliminated(false);
+    setActiveModalMatch(null);
+    setIsJanuaryModalOpen(false);
     setDraftPhase('mode_select');
   };
 
@@ -1321,6 +1455,9 @@ export function useDraftSim() {
     setStartingXI(new Array(11).fill(null));
     setBench(new Array(5).fill(null));
     setMatchHistory([]);
+    setLeagueTable([]);
+    setActiveModalMatch(null);
+    setIsJanuaryModalOpen(false);
     setMatchday(1);
     setSeasonAwards(null);
     setIsSeasonComplete(false);

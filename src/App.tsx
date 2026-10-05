@@ -14,7 +14,7 @@ import { ShareTeamModal } from './components/ShareTeamModal';
 import { SuperExpertDraftInput } from './components/SuperExpertDraftInput';
 import { WalkoutCeremony } from './components/WalkoutCeremony';
 import { soundEngine } from './utils/soundEngine';
-import { GameMode, Player, BuiltPlayerResult, MatchResult } from './types/football';
+import { GameMode, Player, BuiltPlayerResult, MatchResult, FormationSlot } from './types/football';
 import { getLeagueOpponents } from './data/opponents';
 import { getEligibleSquads } from './data/squads';
 import { isDuplicatePlayer, getChemistryBonusForDraft } from './engine/chemistryEngine';
@@ -165,8 +165,8 @@ export function App() {
   const hasEmptyOutfieldSlot = useMemo(() => startingXI.slice(1).some(s => s === null), [startingXI]);
   const emptyStarterSlots = useMemo(() => {
     return formation.slots
-      .map((slot, idx) => ({ slot, idx }))
-      .filter(item => startingXI[item.idx] === null);
+      .map((slot: FormationSlot, idx: number) => ({ slot, idx }))
+      .filter((item: { slot: FormationSlot; idx: number }) => startingXI[item.idx] === null);
   }, [formation.slots, startingXI]);
 
   const maxMatchdays = useMemo(() => {
@@ -1038,7 +1038,7 @@ export function App() {
                         if (!isDrafted && !isDuplicate && emptyStarterSlots.length > 0) {
                           let minPenalty = 999;
                           let bestLabel = '';
-                          emptyStarterSlots.forEach(({ slot }) => {
+                          emptyStarterSlots.forEach(({ slot }: { slot: FormationSlot; idx: number }) => {
                             const fit = calculatePositionFit(player.specificPosition, slot.label);
                             if (fit.tier !== 'invalid' && fit.penaltyOvr < minPenalty) {
                               minPenalty = fit.penaltyOvr;
@@ -1562,7 +1562,10 @@ export function App() {
           onSubPlayer={handleSubPlayer}
           onClose={() => setActiveModalMatch(null)}
           onNextMatch={
-            draftPhase === 'season_hub' && matchday <= maxMatchdays && !isTournamentEliminated
+            draftPhase === 'season_hub' &&
+            matchday <= maxMatchdays &&
+            !isTournamentEliminated &&
+            activeModalMatch.id === matchHistory[0]?.id
               ? () => {
                   handleSimulateNextLeagueMatch(tacticalEdgeActive, mindGameChoice);
                   setTacticalEdgeActive(false);
@@ -2142,7 +2145,7 @@ export function App() {
             }
           }}
         >
-          <div className="w-full max-w-5xl my-auto h-[92vh] max-h-[92vh] flex flex-col cursor-default" onClick={e => e.stopPropagation()}>
+          <div className="w-full max-w-5xl my-auto h-[92vh] max-h-[92vh] flex flex-col min-h-0 cursor-default" onClick={e => e.stopPropagation()}>
             <PlayerCareerMode
               initialBuiltPlayer={playerCareerImportCandidate}
               onExit={() => {
@@ -2252,7 +2255,10 @@ export function App() {
           managerName={manager?.name}
           onClose={() => setSummaryModalMatch(null)}
           onNextMatch={
-            draftPhase === 'season_hub' && matchday <= maxMatchdays && !isTournamentEliminated
+            draftPhase === 'season_hub' &&
+            matchday <= maxMatchdays &&
+            !isTournamentEliminated &&
+            summaryModalMatch.id === matchHistory[0]?.id
               ? () => {
                   handleSimulateNextLeagueMatch(tacticalEdgeActive, mindGameChoice);
                   setTacticalEdgeActive(false);
